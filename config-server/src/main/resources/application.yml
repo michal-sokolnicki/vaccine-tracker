@@ -1,5 +1,5 @@
 server:
-  port: 8888
+  port: 8181
 
 logging:
   level:
@@ -15,11 +15,11 @@ spring:
         git:
           uri: https://github.com/michal-sokolnicki/spring-cloud-config-repository.git
           username: michal-sokolnicki
-          password: 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
+          password: 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
           default-label: main
           clone-on-start: true
     fail-fast: true
   security:
     user:
       name: spring_cloud_user
-      password: cloud!
+      password: c1oud!_2020

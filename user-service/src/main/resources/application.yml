@@ -1,15 +1,15 @@
 server:
-  port: 8282
+  port: 8383
 
 spring:
   application:
-    name: booking-service
+    name: user-service
   profiles:
-    active: booking_service
+    active: consumer
   config:
     import: 'configserver:http://localhost:8181'
   cloud:
     config:
-      name: booking-service,config-client
+      name: user-service,config-client
       username: spring_cloud_user
       password: c1oud!_2020
