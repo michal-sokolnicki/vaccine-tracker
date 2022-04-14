@@ -7,9 +7,9 @@ services:
       - kafka-broker-2
       - kafka-broker-3
     ports:
-      - "5005:5005"
+      - "8181:8181"
     volumes:
-      - "./docker-logs:/workspace/booking-service/logs"
+      - "./docker-logs:/booking-service/logs"
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms128m -Xmx256m"
       - "LOGGING_LEVEL_COM_VACCINETRACKER=debug"
