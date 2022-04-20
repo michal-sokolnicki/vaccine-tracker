@@ -1,5 +1,6 @@
 package com.vaccinetracker.booking.config;
 
+import com.vaccinetracker.config.UserConfigData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +13,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final UserConfigData userConfigData;
+
+    public SecurityConfig(UserConfigData userConfigData) {
+        this.userConfigData = userConfigData;
+    }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
@@ -26,9 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder builder) throws Exception {
         builder.inMemoryAuthentication()
-                .withUser("test")
-                .password(passwordEncoder().encode("test"))
-                .roles("USER");
+                .withUser(userConfigData.getUsername())
+                .password(passwordEncoder().encode(userConfigData.getPassword()))
+                .roles(userConfigData.getRoles());
     }
 
     @Bean
