@@ -5,7 +5,7 @@ spring:
   application:
     name: user-service
   profiles:
-    active: consumer
+    active: user_service
   config:
     import: 'configserver:http://localhost:8181'
   cloud:
@@ -13,3 +13,7 @@ spring:
       name: user-service,config-client
       username: spring_cloud_user
       password: c1oud!_2020
+  security:
+    user:
+      name: test
+      password: test

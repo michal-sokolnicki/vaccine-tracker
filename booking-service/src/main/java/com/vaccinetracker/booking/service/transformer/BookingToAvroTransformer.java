@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookingToAvroTransformer {
 
-    public BookingAvroModel getBookingAvroModel(BookingRequest bookingRequest) {
+    /*public BookingAvroModel getBookingAvroModel(BookingRequest bookingRequest) {
         return BookingAvroModel.newBuilder()
                 .setUserId(1)
                 .setFirstName("John")
@@ -17,5 +17,5 @@ public class BookingToAvroTransformer {
                 .setDate(bookingRequest.getDate())
                 .setTime(bookingRequest.getTime())
                 .build();
-    }
+    }*/
 }

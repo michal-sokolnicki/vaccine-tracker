@@ -15,11 +15,11 @@ spring:
         git:
           uri: https://github.com/michal-sokolnicki/spring-cloud-config-repository.git
           username: michal-sokolnicki
-          password: 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
+          password: '{cipher}98c18823aa45d3d761d82ff490e70e02884be132990079301e838900c5774042e6eb50b204411e390020c895bc3ad94a9b43388d3efc241a5045c04b0ad62e12'
           default-label: main
           clone-on-start: true
     fail-fast: true
   security:
     user:
       name: spring_cloud_user
-      password: c1oud!_2020
+      password: '{cipher}25bb67d9e841669ebfeb499458aeb10f8d2f054415001025b69e5b14a80f9dec'

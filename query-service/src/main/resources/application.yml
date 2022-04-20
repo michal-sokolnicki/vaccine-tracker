@@ -1,0 +1,19 @@
+server:
+  port: 8484
+
+spring:
+  application:
+    name: query-service
+  profiles:
+    active: query_service
+  config:
+    import: 'configserver:http://localhost:8181'
+  cloud:
+    config:
+      name: query-service,config-client
+      username: spring_cloud_user
+      password: '{cipher}25bb67d9e841669ebfeb499458aeb10f8d2f054415001025b69e5b14a80f9dec'
+  security:
+    user:
+      name: test
+      password: test

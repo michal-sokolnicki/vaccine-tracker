@@ -7,11 +7,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class BookingRequest {
-    private Long vaccineCenterId;
+
+    private String firstname;
+    private String surname;
+    private String govId;
+    private String vaccineCenter;
+    private String address;
     private String vaccineType;
-    private String date;
-    private String time;
+    private String term;
 }
