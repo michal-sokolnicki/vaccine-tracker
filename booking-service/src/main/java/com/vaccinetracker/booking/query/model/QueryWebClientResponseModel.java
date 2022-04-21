@@ -1,16 +1,17 @@
-package com.vaccinetracker.booking.entity;
+package com.vaccinetracker.booking.query.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingRequest {
+public class QueryWebClientResponseModel {
 
+    private String id;
     private String firstname;
     private String surname;
     private String govId;

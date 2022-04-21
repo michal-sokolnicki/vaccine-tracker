@@ -6,5 +6,5 @@ import com.vaccinetracker.booking.entity.BookingRequestUpdate;
 public interface BookingService {
 
     void booking(BookingRequest bookingRequest);
-    void updateBooking(String id, BookingRequestUpdate bookingRequestUpdate);
+    void updateBooking(String id, BookingRequest bookingRequest);
 }

@@ -9,5 +9,4 @@ public interface ElasticIndexClient<T extends IndexModel> {
 
     String save(T document);
     List<String> saveAll(List<T> documents);
-    BookingIndexModel findById(String id);
 }

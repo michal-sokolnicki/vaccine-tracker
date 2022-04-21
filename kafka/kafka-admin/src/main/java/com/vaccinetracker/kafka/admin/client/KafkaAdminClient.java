@@ -104,7 +104,10 @@ public class KafkaAdminClient {
         try {
             Thread.sleep(sleepTimeMs);
         } catch (InterruptedException e) {
-            throw new KafkaClientException("Error while sleeping for waiting new created topics!");
+            Thread.currentThread().interrupt();
+            if (Thread.interrupted()) {
+                throw new KafkaClientException("Error while sleeping for waiting new created topics!");
+            }
         }
     }
 

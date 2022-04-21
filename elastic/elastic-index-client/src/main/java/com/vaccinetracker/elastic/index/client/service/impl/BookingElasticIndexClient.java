@@ -35,7 +35,7 @@ public class BookingElasticIndexClient implements ElasticIndexClient<BookingInde
     public String save(BookingIndexModel document) {
         IndexQuery indexQuery = elasticIndexUtil.getIndexQuery(document);
         String documentId = elasticsearchOperations.index(indexQuery,
-                IndexCoordinates.of(elasticConfigData.getIndexName()));
+                IndexCoordinates.of(elasticConfigData.getBookingIndexName()));
         log.info("Documents indexed successfully with type: {} and ids: {}",
                 BookingIndexModel.class.getName(), documentId);
         return documentId;
@@ -45,17 +45,12 @@ public class BookingElasticIndexClient implements ElasticIndexClient<BookingInde
     public List<String> saveAll(List<BookingIndexModel> documents) {
         List<IndexQuery> indexQueries = elasticIndexUtil.getIndexQueries(documents);
         List<String> documentIds = elasticsearchOperations.bulkIndex(indexQueries,
-                        IndexCoordinates.of(elasticConfigData.getIndexName()))
+                        IndexCoordinates.of(elasticConfigData.getBookingIndexName()))
                         .stream()
                         .map(IndexedObjectInformation::getId)
                         .collect(Collectors.toList());
         log.info("Documents indexed successfully with type: {} and ids: {}",
                 BookingIndexModel.class.getName(), documentIds);
         return documentIds;
-    }
-
-    @Override
-    public BookingIndexModel findById(String id) {
-        return elasticsearchOperations.get(id, BookingIndexModel.class);
     }
 }

@@ -11,7 +11,8 @@ import java.util.List;
 @ConfigurationProperties(prefix = "elastic-query-config")
 public class ElasticQueryConfigData {
 
-    private List<String> fields;
+    private List<String> bookingFields;
     private String govIdField;
     private String statusField;
+    private List<String> vaccineCenterFields;
 }

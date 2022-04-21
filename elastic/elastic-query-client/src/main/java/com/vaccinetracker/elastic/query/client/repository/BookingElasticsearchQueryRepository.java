@@ -8,8 +8,9 @@ import java.util.List;
 
 public interface BookingElasticsearchQueryRepository extends ElasticsearchRepository<BookingIndexModel, String> {
 
+    List<BookingIndexModel> findByGovId(String govId);
+    List<BookingIndexModel> findByGovIdAndStatus(String govId, String status);
+
     @Query("{\"multi_match\" : { \"query\": \"?0\", \"fields\": [ \"vaccine_center\", \"vaccine_type\"]}}")
     List<BookingIndexModel> findByVaccineCenterOrVaccineType(String text);
-    List<BookingIndexModel> findByGovIdAndStatus(String govId, String status);
-    List<BookingIndexModel> findByGovId(String govId);
 }

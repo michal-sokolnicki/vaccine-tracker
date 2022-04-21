@@ -38,7 +38,6 @@
 		<spring-cloud.version>3.1.0</spring-cloud.version>
 		<spring-cloud-dependecies.version>2021.0.0</spring-cloud-dependecies.version>
 		<spring-data-elasticsearch.version>4.3.3</spring-data-elasticsearch.version>
-		<jasypt-spring-boot.version>3.0.4</jasypt-spring-boot.version>
 		<maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
 		<lombok.version>1.18.22</lombok.version>
 		<avro.version>1.11.0</avro.version>
@@ -168,11 +167,6 @@
 				<groupId>org.springframework.retry</groupId>
 				<artifactId>spring-retry</artifactId>
 				<version>${spring-retry.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.ulisesbocchio</groupId>
-				<artifactId>jasypt-spring-boot-starter</artifactId>
-				<version>${jasypt-spring-boot.version}</version>
 			</dependency>
 
 			<dependency>

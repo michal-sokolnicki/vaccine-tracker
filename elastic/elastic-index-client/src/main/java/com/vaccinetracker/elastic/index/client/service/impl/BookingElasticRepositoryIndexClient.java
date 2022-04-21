@@ -38,10 +38,4 @@ public class BookingElasticRepositoryIndexClient implements ElasticIndexClient<B
         log.info("Documents indexed successfully with type: {} and ids: {}", BookingIndexModel.class.getName(), ids);
         return ids;
     }
-
-    @Override
-    public BookingIndexModel findById(String id) {
-        return bookingElasticsearchIndexRepository.findById(id)
-                .orElseThrow(() -> new ElasticIndexClientException(MessageFormat.format("Document with id: {} not found", id)));
-    }
 }

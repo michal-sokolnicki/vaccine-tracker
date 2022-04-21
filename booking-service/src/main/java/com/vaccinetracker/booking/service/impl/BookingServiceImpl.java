@@ -1,8 +1,8 @@
 package com.vaccinetracker.booking.service.impl;
 
 import com.vaccinetracker.booking.entity.BookingRequest;
-import com.vaccinetracker.booking.entity.BookingRequestUpdate;
 import com.vaccinetracker.booking.service.BookingService;
+import com.vaccinetracker.booking.service.QueryWebClient;
 import com.vaccinetracker.booking.service.transformer.BookingToIndexModelTransformer;
 import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
@@ -13,40 +13,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookingServiceImpl implements BookingService {
 
-    /*private final KafkaConfigData kafkaConfigData;
-    private final KafkaProducer<Long, BookingAvroModel> kafkaProducer;
-    private final BookingToAvroTransformer bookingToAvroTransformer;*/
-
-    /*public BookingService(KafkaConfigData kafkaConfigData, KafkaProducer<Long, BookingAvroModel> kafkaProducer,
-                          BookingToAvroTransformer bookingToAvroTransformer) {
-        this.kafkaConfigData = kafkaConfigData;
-        this.kafkaProducer = kafkaProducer;
-        this.bookingToAvroTransformer = bookingToAvroTransformer;
-    }*/
-
     private final BookingToIndexModelTransformer bookingToIndexModelTransformer;
     private final ElasticIndexClient<BookingIndexModel> elasticIndexClient;
+    private final QueryWebClient queryWebClient;
 
     public BookingServiceImpl(BookingToIndexModelTransformer bookingToIndexModelTransformer,
-                              ElasticIndexClient<BookingIndexModel> elasticIndexClient) {
+                              ElasticIndexClient<BookingIndexModel> elasticIndexClient, QueryWebClient queryWebClient) {
         this.bookingToIndexModelTransformer = bookingToIndexModelTransformer;
         this.elasticIndexClient = elasticIndexClient;
+        this.queryWebClient = queryWebClient;
     }
 
     @Override
     public void booking(BookingRequest bookingRequest) {
-        /*BookingAvroModel bookingAvroModel = bookingToAvroTransformer.getBookingAvroModel(bookingRequest);
-        kafkaProducer.send(kafkaConfigData.getTopicName(), bookingAvroModel.getUserId(), bookingAvroModel);*/
         BookingIndexModel bookingIndexModelToCreate = bookingToIndexModelTransformer.getBookingIndexModelToCreate(bookingRequest);
         String id = elasticIndexClient.save(bookingIndexModelToCreate);
         log.info("Document with id: {} has been created in elasticsearch", id);
     }
 
     @Override
-    public void updateBooking(String id, BookingRequestUpdate bookingRequestUpdate) {
-            BookingIndexModel bookingIndexModel = elasticIndexClient.findById(id);
+    public void updateBooking(String id, BookingRequest bookingRequest) {
         BookingIndexModel bookingIndexModelToUpdate =
-                bookingToIndexModelTransformer.getBookingIndexModelToUpdate(bookingIndexModel, bookingRequestUpdate);
+                bookingToIndexModelTransformer.getBookingIndexModelToUpdate(id, bookingRequest);
         elasticIndexClient.save(bookingIndexModelToUpdate);
         log.info("Document with id: {} has been updated in elasticsearch", id);
     }

@@ -1,7 +1,9 @@
 package com.vaccinetracker.query.transformer;
 
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
-import com.vaccinetracker.query.model.QueryServiceResponseModel;
+import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
+import com.vaccinetracker.query.model.BookingQueryServiceResponseModel;
+import com.vaccinetracker.query.model.VaccineCenterQueryServiceResponseModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,8 +12,8 @@ import java.util.stream.Collectors;
 @Component
 public class IndexModelToResponseModelTransformer {
 
-    public QueryServiceResponseModel getResponseModel(BookingIndexModel bookingIndexModel) {
-        return QueryServiceResponseModel.builder()
+    public BookingQueryServiceResponseModel getBookingResponseModel(BookingIndexModel bookingIndexModel) {
+        return BookingQueryServiceResponseModel.builder()
                 .id(bookingIndexModel.getId())
                 .firstname(bookingIndexModel.getFirstname())
                 .surname(bookingIndexModel.getSurname())
@@ -24,9 +26,26 @@ public class IndexModelToResponseModelTransformer {
                 .build();
     }
 
-    public List<QueryServiceResponseModel> getResponseModels(List<BookingIndexModel> bookingIndexModels) {
+    public List<BookingQueryServiceResponseModel> getBookingResponseModels(List<BookingIndexModel> bookingIndexModels) {
         return bookingIndexModels.stream()
-                .map(this::getResponseModel)
+                .map(this::getBookingResponseModel)
+                .collect(Collectors.toList());
+    }
+
+    public VaccineCenterQueryServiceResponseModel getVaccineCenterResponseModel(
+            VaccineCenterIndexModel vaccineCenterIndexModel) {
+        return VaccineCenterQueryServiceResponseModel.builder()
+                .id(vaccineCenterIndexModel.getId())
+                .name(vaccineCenterIndexModel.getName())
+                .address(vaccineCenterIndexModel.getAddress())
+                .vaccineStocks(vaccineCenterIndexModel.getVaccineStocks())
+                .build();
+    }
+
+    public List<VaccineCenterQueryServiceResponseModel> getVaccineCenterResponseModels(
+            List<VaccineCenterIndexModel> vaccineCenterIndexModels) {
+        return vaccineCenterIndexModels.stream()
+                .map(this::getVaccineCenterResponseModel)
                 .collect(Collectors.toList());
     }
 }

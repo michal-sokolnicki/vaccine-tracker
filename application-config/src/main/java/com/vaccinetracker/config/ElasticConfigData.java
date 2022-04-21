@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "elastic-config")
 public class ElasticConfigData {
-    private String indexName;
+
+    private String bookingIndexName;
+    private String vaccineCenterIndexName;
     private String connectionUrl;
     private Integer connectionTimeoutMs;
     private Integer socketTimeoutMs;

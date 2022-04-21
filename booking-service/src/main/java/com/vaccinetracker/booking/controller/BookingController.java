@@ -25,8 +25,8 @@ public class BookingController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateBooking(@PathVariable("id") final String id,
-                                             @RequestBody BookingRequestUpdate bookingRequestUpdate) {
-        bookingService.updateBooking(id, bookingRequestUpdate);
+                                             @RequestBody final BookingRequest bookingRequest) {
+        bookingService.updateBooking(id, bookingRequest);
         return new ResponseEntity<>("Your reservation has been updated", HttpStatus.ACCEPTED);
     }
 }

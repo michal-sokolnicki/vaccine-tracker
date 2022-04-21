@@ -14,7 +14,7 @@ import java.util.Locale;
 
 @Data
 @Builder
-@Document(indexName = "#{@elasticConfigData.indexName}")
+@Document(indexName = "#{@elasticConfigData.bookingIndexName}")
 public class BookingIndexModel implements IndexModel {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")

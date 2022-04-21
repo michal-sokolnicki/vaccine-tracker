@@ -1,37 +1,30 @@
 package com.vaccinetracker.elastic.query.client.service.impl;
 
-import com.vaccinetracker.config.ElasticQueryConfigData;
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
-import com.vaccinetracker.elastic.query.client.exception.ElasticQueryClientException;
 import com.vaccinetracker.elastic.query.client.repository.BookingElasticsearchQueryRepository;
 import com.vaccinetracker.elastic.query.client.service.ElasticQueryClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.*;
 
 @Slf4j
 @Primary
 @Service
-public class BookingElasticRepositoryQueryClient implements ElasticQueryClient<BookingIndexModel> {
+public class BookingElasticRepositoryQueryClient extends ElasticRepositoryQueryClientBase<BookingIndexModel>
+        implements ElasticQueryClient<BookingIndexModel> {
 
     private final BookingElasticsearchQueryRepository bookingElasticsearchQueryRepository;
 
     public BookingElasticRepositoryQueryClient(BookingElasticsearchQueryRepository bookingElasticsearchQueryRepository) {
+        super(bookingElasticsearchQueryRepository);
         this.bookingElasticsearchQueryRepository = bookingElasticsearchQueryRepository;
     }
 
     @Override
     public BookingIndexModel getIndexModelById(String id) {
-        return bookingElasticsearchQueryRepository.findById(id)
-                .map(bookingIndexModel -> {
-                    log.info("Document with id {} retrieved successfully", id);
-                    return bookingIndexModel;
-                })
-                .orElseThrow(() -> new ElasticQueryClientException(
-                        MessageFormat.format("Document with id: {} not found", id)));
+        return getById(id);
     }
 
     @Override
