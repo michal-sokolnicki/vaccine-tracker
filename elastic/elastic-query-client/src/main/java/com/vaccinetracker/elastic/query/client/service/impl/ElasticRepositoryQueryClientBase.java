@@ -4,13 +4,11 @@ import com.vaccinetracker.elastic.model.IndexModel;
 import com.vaccinetracker.elastic.query.client.exception.ElasticQueryClientException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
 @Slf4j
-@Service
-public class ElasticRepositoryQueryClientBase<T extends IndexModel> {
+public abstract class ElasticRepositoryQueryClientBase<T extends IndexModel> {
 
     private final ElasticsearchRepository<T, String> elasticsearchRepository;
 
