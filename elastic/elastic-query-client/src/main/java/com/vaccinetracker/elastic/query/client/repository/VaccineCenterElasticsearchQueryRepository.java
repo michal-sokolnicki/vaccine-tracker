@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface VaccineCenterElasticsearchQueryRepository extends ElasticsearchRepository<VaccineCenterIndexModel, String> {
-
-    @Query("{\"multi_match\" : { \"query\": \"?0\", \"fields\": [ \"name\", \"address\"]}}")
-    List<VaccineCenterIndexModel> findByNameOrAddress(String text);
+public interface VaccineCenterElasticsearchQueryRepository extends ElasticsearchRepository<VaccineCenterIndexModel, String>,
+        CustomizedVaccineCenterElasticsearchQueryRepository {
 }

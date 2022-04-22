@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class VaccineCenterElasticRepositoryIndexClient implements ElasticIndexClient<VaccineCenterIndexModel> {
+public class VaccineCenterElasticIndexClient implements ElasticIndexClient<VaccineCenterIndexModel> {
 
     private final VaccineCenterElasticsearchIndexRepository vaccineCenterElasticsearchIndexRepository;
 
-    public VaccineCenterElasticRepositoryIndexClient(VaccineCenterElasticsearchIndexRepository vaccineCenterElasticsearchIndexRepository) {
+    public VaccineCenterElasticIndexClient(VaccineCenterElasticsearchIndexRepository vaccineCenterElasticsearchIndexRepository) {
         this.vaccineCenterElasticsearchIndexRepository = vaccineCenterElasticsearchIndexRepository;
     }
 

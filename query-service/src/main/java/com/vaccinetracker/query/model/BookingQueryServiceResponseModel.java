@@ -16,7 +16,8 @@ public class BookingQueryServiceResponseModel {
     private String firstname;
     private String surname;
     private String govId;
-    private String vaccineCenter;
+    private String vaccineCenterId;
+    private String vaccineCenterName;
     private String address;
     private String vaccineType;
     private String term;

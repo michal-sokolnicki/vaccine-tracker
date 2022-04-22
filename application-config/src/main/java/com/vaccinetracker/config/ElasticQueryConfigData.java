@@ -15,4 +15,8 @@ public class ElasticQueryConfigData {
     private String govIdField;
     private String statusField;
     private List<String> vaccineCenterFields;
+    private List<String> vaccineCenterSourceFields;
+    private String vaccineStockPath;
+    private String vaccineStockQuantityField;
+    private String vaccineStockNameField;
 }
