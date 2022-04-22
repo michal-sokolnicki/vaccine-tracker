@@ -3,12 +3,7 @@
     "type": "record",
     "name": "BookingAvroModel",
     "fields": [
-        {"name": "userId", "type": "long"},
-        {"name": "firstName", "type": "string"},
-        {"name": "surname", "type": "string"},
-        {"name": "vaccineCenterId", "type": "long"},
-        {"name": "vaccineType", "type": "string"},
-        {"name": "date", "type": "string"},
-        {"name": "time", "type": "string"}
+        {"name": "vaccineCenterId", "type": "string"},
+        {"name": "vaccineType", "type": "string"}
     ]
 }

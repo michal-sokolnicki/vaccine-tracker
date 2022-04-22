@@ -1,6 +1,6 @@
 package com.vaccinetracker.booking;
 
-import com.vaccinetracker.booking.service.StreamInitializer;
+import com.vaccinetracker.booking.service.Initializer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "com.vaccinetracker")
 public class BookingServiceApplication implements CommandLineRunner {
 
-    private final StreamInitializer streamInitializer;
+    private final Initializer initializer;
 
-    public BookingServiceApplication(StreamInitializer streamInitializer) {
-        this.streamInitializer = streamInitializer;
+    public BookingServiceApplication(Initializer initializer) {
+        this.initializer = initializer;
     }
 
     public static void main(String[] args) {
@@ -22,6 +22,6 @@ public class BookingServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        streamInitializer.init();
+        initializer.init();
     }
 }

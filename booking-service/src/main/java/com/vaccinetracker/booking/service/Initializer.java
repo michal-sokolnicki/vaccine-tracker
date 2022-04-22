@@ -1,5 +1,5 @@
 package com.vaccinetracker.booking.service;
 
-public interface StreamInitializer {
+public interface Initializer {
     void init();
 }

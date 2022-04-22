@@ -7,5 +7,5 @@ import org.springframework.boot.test.context.SpringBootTest;
 class BookingQueryServiceApplicationTest {
 
     @Test
-    public void contextLoads(){}
+    void contextLoads(){}
 }

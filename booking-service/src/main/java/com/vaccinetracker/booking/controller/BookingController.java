@@ -1,7 +1,6 @@
 package com.vaccinetracker.booking.controller;
 
 import com.vaccinetracker.booking.entity.BookingRequest;
-import com.vaccinetracker.booking.entity.BookingRequestUpdate;
 import com.vaccinetracker.booking.service.impl.BookingServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

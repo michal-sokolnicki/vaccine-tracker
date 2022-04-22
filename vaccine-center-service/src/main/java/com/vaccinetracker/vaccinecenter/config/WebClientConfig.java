@@ -1,4 +1,4 @@
-package com.vaccinetracker.booking.config;
+package com.vaccinetracker.vaccinecenter.config;
 
 import com.vaccinetracker.config.QueryWebClientConfigData;
 import com.vaccinetracker.config.UserConfigData;

@@ -34,7 +34,9 @@ public class BookingElasticRepositoryIndexClient implements ElasticIndexClient<B
     @Override
     public List<String> saveAll(List<BookingIndexModel> documents) {
         List<BookingIndexModel> bookingIndexModels = (List<BookingIndexModel>) bookingElasticsearchIndexRepository.saveAll(documents);
-        List<String> ids = bookingIndexModels.stream().map(BookingIndexModel::getId).collect(Collectors.toList());
+        List<String> ids = bookingIndexModels.stream()
+                .map(BookingIndexModel::getId)
+                .collect(Collectors.toList());
         log.info("Documents indexed successfully with type: {} and ids: {}", BookingIndexModel.class.getName(), ids);
         return ids;
     }

@@ -14,6 +14,7 @@ public class BookingRequest {
     private String firstname;
     private String surname;
     private String govId;
+    private String vaccineCenterId;
     private String vaccineCenter;
     private String address;
     private String vaccineType;

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class QueryWebClientConfigData {
 
     private final WebClient webClient;
+    private final Query queryById;
 
     @Data
     @Component
@@ -22,5 +23,11 @@ public class QueryWebClientConfigData {
         private String contentType;
         private String acceptType;
         private String baseUrl;
+    }
+
+    @Data
+    @Component
+    public static class Query {
+        private String uri;
     }
 }

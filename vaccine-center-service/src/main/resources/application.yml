@@ -1,12 +1,12 @@
 spring:
   application:
-    name: query-service
+    name: vaccine-center-service
   profiles:
-    active: query_service
+    active: vaccine_center_service
   config:
     import: 'configserver:http://localhost:8181'
   cloud:
     config:
-      name: query-service, config-client
+      name: vaccine-center-service, config-client
       username: spring_cloud_user
       password: '{cipher}25bb67d9e841669ebfeb499458aeb10f8d2f054415001025b69e5b14a80f9dec'

@@ -1,4 +1,4 @@
-package com.vaccinetracker.booking.query.exception;
+package com.vaccinetracker.vaccinecenter.query.exception;
 
 public class QueryWebClientException extends RuntimeException {
 
