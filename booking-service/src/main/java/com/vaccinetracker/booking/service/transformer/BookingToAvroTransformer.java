@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookingToAvroTransformer {
 
-    public BookingAvroModel getBookingAvroModel(BookingRequest bookingRequest) {
+    public BookingAvroModel getBookingAvroModel(String id, BookingRequest bookingRequest) {
         return BookingAvroModel.newBuilder()
+                .setBookingId(id)
                 .setVaccineCenterId(bookingRequest.getVaccineCenterId())
                 .setVaccineType(bookingRequest.getVaccineType())
                 .build();

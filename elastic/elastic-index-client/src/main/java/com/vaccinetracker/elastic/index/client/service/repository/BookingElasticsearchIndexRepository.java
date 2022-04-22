@@ -1,4 +1,4 @@
-package com.vaccinetracker.elastic.index.client.repository;
+package com.vaccinetracker.elastic.index.client.service.repository;
 
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

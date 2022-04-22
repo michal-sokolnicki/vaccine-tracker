@@ -1,6 +1,6 @@
 package com.vaccinetracker.elastic.index.client.service.impl;
 
-import com.vaccinetracker.elastic.index.client.repository.VaccineCenterElasticsearchIndexRepository;
+import com.vaccinetracker.elastic.index.client.service.repository.VaccineCenterElasticsearchIndexRepository;
 import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import lombok.extern.slf4j.Slf4j;

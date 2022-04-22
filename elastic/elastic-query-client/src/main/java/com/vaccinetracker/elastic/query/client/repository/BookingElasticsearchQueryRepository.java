@@ -11,6 +11,6 @@ public interface BookingElasticsearchQueryRepository extends ElasticsearchReposi
     List<BookingIndexModel> findByGovId(String govId);
     List<BookingIndexModel> findByGovIdAndStatus(String govId, String status);
 
-    @Query("{\"multi_match\" : { \"query\": \"?0\", \"fields\": [ \"vaccine_center\", \"vaccine_type\"]}}")
+    @Query("{\"multi_match\" : { \"query\": \"?0\", \"fields\": [ \"vaccine_center_name\", \"vaccine_type\"]}}")
     List<BookingIndexModel> findByVaccineCenterOrVaccineType(String text);
 }

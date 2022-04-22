@@ -1,14 +1,12 @@
 package com.vaccinetracker.elastic.index.client.service.impl;
 
-import com.vaccinetracker.elastic.index.client.exception.ElasticIndexClientException;
-import com.vaccinetracker.elastic.index.client.repository.BookingElasticsearchIndexRepository;
+import com.vaccinetracker.elastic.index.client.service.repository.BookingElasticsearchIndexRepository;
 import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 

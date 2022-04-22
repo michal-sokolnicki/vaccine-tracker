@@ -13,4 +13,7 @@ public class VaccineStock {
 
     @Field
     private Integer quantity;
+
+    @Field
+    private Integer reserve;
 }

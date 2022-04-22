@@ -33,8 +33,11 @@ public class BookingIndexModel implements IndexModel {
     @Field("gov_id")
     private String govId;
 
-    @Field("vaccine_center")
-    private String vaccineCenter;
+    @Field("vaccine_center_id")
+    private String vaccineCenterId;
+
+    @Field("vaccine_center_name")
+    private String vaccineCenterName;
 
     @Field
     private String address;
@@ -63,30 +66,5 @@ public class BookingIndexModel implements IndexModel {
 
     public String getStringTerm() {
         return term;
-    }
-
-    public static BookingIndexModelBuilder builder() {
-        return new BookingIndexModelBuilder();
-    }
-
-    public static BookingIndexModelBuilder builder(BookingIndexModel bookingIndexModel) {
-        return new BookingIndexModelBuilder(bookingIndexModel);
-    }
-
-    public static class BookingIndexModelBuilder {
-
-        public BookingIndexModelBuilder() {}
-
-        public BookingIndexModelBuilder(BookingIndexModel bookingIndexModel) {
-            this.bookingId = bookingIndexModel.getBookingId();
-            this.firstname = bookingIndexModel.getFirstname();
-            this.surname = bookingIndexModel.getSurname();
-            this.govId = bookingIndexModel.getGovId();
-            this.vaccineCenter = bookingIndexModel.getVaccineCenter();
-            this.address = bookingIndexModel.getAddress();
-            this.vaccineType = bookingIndexModel.getVaccineType();
-            this.term = formatter.format(bookingIndexModel.getTerm());
-            this.status = Status.valueOf(bookingIndexModel.getStatus());
-        }
     }
 }

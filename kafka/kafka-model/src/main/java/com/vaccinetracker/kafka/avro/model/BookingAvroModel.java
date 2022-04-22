@@ -14,10 +14,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7684326933668547595L;
+  private static final long serialVersionUID = 6607327130326200230L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BookingAvroModel\",\"namespace\":\"com.vaccinetracker.kafka.avro.model\",\"fields\":[{\"name\":\"vaccineCenterId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"vaccineType\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"BookingAvroModel\",\"namespace\":\"com.vaccinetracker.kafka.avro.model\",\"fields\":[{\"name\":\"bookingId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"vaccineCenterId\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}},{\"name\":\"vaccineType\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -73,6 +73,7 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
     return DECODER.decode(b);
   }
 
+  private java.lang.String bookingId;
   private java.lang.String vaccineCenterId;
   private java.lang.String vaccineType;
 
@@ -85,10 +86,12 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
 
   /**
    * All-args constructor.
+   * @param bookingId The new value for bookingId
    * @param vaccineCenterId The new value for vaccineCenterId
    * @param vaccineType The new value for vaccineType
    */
-  public BookingAvroModel(java.lang.String vaccineCenterId, java.lang.String vaccineType) {
+  public BookingAvroModel(java.lang.String bookingId, java.lang.String vaccineCenterId, java.lang.String vaccineType) {
+    this.bookingId = bookingId;
     this.vaccineCenterId = vaccineCenterId;
     this.vaccineType = vaccineType;
   }
@@ -98,8 +101,9 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
   // Used by DatumWriter.  Applications should not call.
   public java.lang.Object get(int field$) {
     switch (field$) {
-    case 0: return vaccineCenterId;
-    case 1: return vaccineType;
+    case 0: return bookingId;
+    case 1: return vaccineCenterId;
+    case 2: return vaccineType;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
@@ -108,10 +112,28 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: vaccineCenterId = value$ != null ? value$.toString() : null; break;
-    case 1: vaccineType = value$ != null ? value$.toString() : null; break;
+    case 0: bookingId = value$ != null ? value$.toString() : null; break;
+    case 1: vaccineCenterId = value$ != null ? value$.toString() : null; break;
+    case 2: vaccineType = value$ != null ? value$.toString() : null; break;
     default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
+  }
+
+  /**
+   * Gets the value of the 'bookingId' field.
+   * @return The value of the 'bookingId' field.
+   */
+  public java.lang.String getBookingId() {
+    return bookingId;
+  }
+
+
+  /**
+   * Sets the value of the 'bookingId' field.
+   * @param value the value to set.
+   */
+  public void setBookingId(java.lang.String value) {
+    this.bookingId = value;
   }
 
   /**
@@ -189,6 +211,7 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<BookingAvroModel>
     implements org.apache.avro.data.RecordBuilder<BookingAvroModel> {
 
+    private java.lang.String bookingId;
     private java.lang.String vaccineCenterId;
     private java.lang.String vaccineType;
 
@@ -203,13 +226,17 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
      */
     private Builder(com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder other) {
       super(other);
-      if (isValidValue(fields()[0], other.vaccineCenterId)) {
-        this.vaccineCenterId = data().deepCopy(fields()[0].schema(), other.vaccineCenterId);
+      if (isValidValue(fields()[0], other.bookingId)) {
+        this.bookingId = data().deepCopy(fields()[0].schema(), other.bookingId);
         fieldSetFlags()[0] = other.fieldSetFlags()[0];
       }
-      if (isValidValue(fields()[1], other.vaccineType)) {
-        this.vaccineType = data().deepCopy(fields()[1].schema(), other.vaccineType);
+      if (isValidValue(fields()[1], other.vaccineCenterId)) {
+        this.vaccineCenterId = data().deepCopy(fields()[1].schema(), other.vaccineCenterId);
         fieldSetFlags()[1] = other.fieldSetFlags()[1];
+      }
+      if (isValidValue(fields()[2], other.vaccineType)) {
+        this.vaccineType = data().deepCopy(fields()[2].schema(), other.vaccineType);
+        fieldSetFlags()[2] = other.fieldSetFlags()[2];
       }
     }
 
@@ -219,14 +246,58 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
      */
     private Builder(com.vaccinetracker.kafka.avro.model.BookingAvroModel other) {
       super(SCHEMA$, MODEL$);
-      if (isValidValue(fields()[0], other.vaccineCenterId)) {
-        this.vaccineCenterId = data().deepCopy(fields()[0].schema(), other.vaccineCenterId);
+      if (isValidValue(fields()[0], other.bookingId)) {
+        this.bookingId = data().deepCopy(fields()[0].schema(), other.bookingId);
         fieldSetFlags()[0] = true;
       }
-      if (isValidValue(fields()[1], other.vaccineType)) {
-        this.vaccineType = data().deepCopy(fields()[1].schema(), other.vaccineType);
+      if (isValidValue(fields()[1], other.vaccineCenterId)) {
+        this.vaccineCenterId = data().deepCopy(fields()[1].schema(), other.vaccineCenterId);
         fieldSetFlags()[1] = true;
       }
+      if (isValidValue(fields()[2], other.vaccineType)) {
+        this.vaccineType = data().deepCopy(fields()[2].schema(), other.vaccineType);
+        fieldSetFlags()[2] = true;
+      }
+    }
+
+    /**
+      * Gets the value of the 'bookingId' field.
+      * @return The value.
+      */
+    public java.lang.String getBookingId() {
+      return bookingId;
+    }
+
+
+    /**
+      * Sets the value of the 'bookingId' field.
+      * @param value The value of 'bookingId'.
+      * @return This builder.
+      */
+    public com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder setBookingId(java.lang.String value) {
+      validate(fields()[0], value);
+      this.bookingId = value;
+      fieldSetFlags()[0] = true;
+      return this;
+    }
+
+    /**
+      * Checks whether the 'bookingId' field has been set.
+      * @return True if the 'bookingId' field has been set, false otherwise.
+      */
+    public boolean hasBookingId() {
+      return fieldSetFlags()[0];
+    }
+
+
+    /**
+      * Clears the value of the 'bookingId' field.
+      * @return This builder.
+      */
+    public com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder clearBookingId() {
+      bookingId = null;
+      fieldSetFlags()[0] = false;
+      return this;
     }
 
     /**
@@ -244,9 +315,9 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
       * @return This builder.
       */
     public com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder setVaccineCenterId(java.lang.String value) {
-      validate(fields()[0], value);
+      validate(fields()[1], value);
       this.vaccineCenterId = value;
-      fieldSetFlags()[0] = true;
+      fieldSetFlags()[1] = true;
       return this;
     }
 
@@ -255,7 +326,7 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
       * @return True if the 'vaccineCenterId' field has been set, false otherwise.
       */
     public boolean hasVaccineCenterId() {
-      return fieldSetFlags()[0];
+      return fieldSetFlags()[1];
     }
 
 
@@ -265,7 +336,7 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
       */
     public com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder clearVaccineCenterId() {
       vaccineCenterId = null;
-      fieldSetFlags()[0] = false;
+      fieldSetFlags()[1] = false;
       return this;
     }
 
@@ -284,9 +355,9 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
       * @return This builder.
       */
     public com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder setVaccineType(java.lang.String value) {
-      validate(fields()[1], value);
+      validate(fields()[2], value);
       this.vaccineType = value;
-      fieldSetFlags()[1] = true;
+      fieldSetFlags()[2] = true;
       return this;
     }
 
@@ -295,7 +366,7 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
       * @return True if the 'vaccineType' field has been set, false otherwise.
       */
     public boolean hasVaccineType() {
-      return fieldSetFlags()[1];
+      return fieldSetFlags()[2];
     }
 
 
@@ -305,7 +376,7 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
       */
     public com.vaccinetracker.kafka.avro.model.BookingAvroModel.Builder clearVaccineType() {
       vaccineType = null;
-      fieldSetFlags()[1] = false;
+      fieldSetFlags()[2] = false;
       return this;
     }
 
@@ -314,8 +385,9 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
     public BookingAvroModel build() {
       try {
         BookingAvroModel record = new BookingAvroModel();
-        record.vaccineCenterId = fieldSetFlags()[0] ? this.vaccineCenterId : (java.lang.String) defaultValue(fields()[0]);
-        record.vaccineType = fieldSetFlags()[1] ? this.vaccineType : (java.lang.String) defaultValue(fields()[1]);
+        record.bookingId = fieldSetFlags()[0] ? this.bookingId : (java.lang.String) defaultValue(fields()[0]);
+        record.vaccineCenterId = fieldSetFlags()[1] ? this.vaccineCenterId : (java.lang.String) defaultValue(fields()[1]);
+        record.vaccineType = fieldSetFlags()[2] ? this.vaccineType : (java.lang.String) defaultValue(fields()[2]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -348,6 +420,8 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
   @Override public void customEncode(org.apache.avro.io.Encoder out)
     throws java.io.IOException
   {
+    out.writeString(this.bookingId);
+
     out.writeString(this.vaccineCenterId);
 
     out.writeString(this.vaccineType);
@@ -359,18 +433,24 @@ public class BookingAvroModel extends org.apache.avro.specific.SpecificRecordBas
   {
     org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
     if (fieldOrder == null) {
+      this.bookingId = in.readString();
+
       this.vaccineCenterId = in.readString();
 
       this.vaccineType = in.readString();
 
     } else {
-      for (int i = 0; i < 2; i++) {
+      for (int i = 0; i < 3; i++) {
         switch (fieldOrder[i].pos()) {
         case 0:
-          this.vaccineCenterId = in.readString();
+          this.bookingId = in.readString();
           break;
 
         case 1:
+          this.vaccineCenterId = in.readString();
+          break;
+
+        case 2:
           this.vaccineType = in.readString();
           break;
 

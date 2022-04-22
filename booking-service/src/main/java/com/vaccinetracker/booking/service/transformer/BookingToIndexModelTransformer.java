@@ -23,7 +23,8 @@ public class BookingToIndexModelTransformer {
         builder.firstname(bookingRequest.getFirstname())
                 .surname(bookingRequest.getSurname())
                 .govId(bookingRequest.getGovId())
-                .vaccineCenter(bookingRequest.getVaccineCenter())
+                .vaccineCenterId(bookingRequest.getVaccineCenterId())
+                .vaccineCenterName(bookingRequest.getVaccineCenterName())
                 .address(bookingRequest.getAddress())
                 .vaccineType(bookingRequest.getVaccineType())
                 .term(bookingRequest.getTerm());

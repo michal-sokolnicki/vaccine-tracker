@@ -45,7 +45,14 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
 
     private void reduceQuantity(VaccineStock vaccineStock, String vaccineType) {
         if (vaccineStock.getName().equals(vaccineType)) {
-            //checkIfQuantityGreaterThanZero(vaccineStock.getQuantity());
+            checkIfQuantityGreaterThanZero(vaccineStock);
+        }
+    }
+
+    private void checkIfQuantityGreaterThanZero(VaccineStock vaccineStock) {
+        if (vaccineStock.getQuantity() <= 0) {
+            vaccineStock.setReserve(vaccineStock.getReserve() - 1);
+        } else {
             vaccineStock.setQuantity(vaccineStock.getQuantity() - 1);
         }
     }

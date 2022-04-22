@@ -38,8 +38,8 @@ public class BookingServiceImpl implements BookingService {
         BookingIndexModel bookingIndexModelToCreate = bookingToIndexModelTransformer.getBookingIndexModelToCreate(bookingRequest);
         String id = elasticIndexClient.save(bookingIndexModelToCreate);
         log.info("Document with id: {} has been created in elasticsearch", id);
-        BookingAvroModel bookingAvroModel = bookingToAvroTransformer.getBookingAvroModel(bookingRequest);
-        kafkaProducer.send(kafkaConfigData.getTopicName(), id, bookingAvroModel);
+        BookingAvroModel bookingAvroModel = bookingToAvroTransformer.getBookingAvroModel(id, bookingRequest);
+        kafkaProducer.send(kafkaConfigData.getTopicName(), kafkaConfigData.getTopicKeyValue(), bookingAvroModel);
     }
 
     @Override

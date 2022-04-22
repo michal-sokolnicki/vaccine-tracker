@@ -14,33 +14,33 @@ import javax.annotation.PreDestroy;
 
 @Slf4j
 @Service
-public class BookingKafkaProducer implements KafkaProducer<Long, BookingAvroModel> {
+public class BookingKafkaProducer implements KafkaProducer<String, BookingAvroModel> {
 
-    private final KafkaTemplate<Long, BookingAvroModel> kafkaTemplate;
+    private final KafkaTemplate<String, BookingAvroModel> kafkaTemplate;
 
-    public BookingKafkaProducer(KafkaTemplate<Long, BookingAvroModel> kafkaTemplate) {
+    public BookingKafkaProducer(KafkaTemplate<String, BookingAvroModel> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
-    public void send(String topicName, Long key, BookingAvroModel message) {
+    public void send(String topicName, String key, BookingAvroModel message) {
         log.info("Sending massage '{}' to topic '{}'", message, topicName);
-        ListenableFuture<SendResult<Long, BookingAvroModel>> kafkaResultFuture =
+        ListenableFuture<SendResult<String, BookingAvroModel>> kafkaResultFuture =
                 kafkaTemplate.send(topicName, key, message);
         addCallback(topicName, message, kafkaResultFuture);
 
     }
 
     private void addCallback(String topicName, BookingAvroModel message,
-                             ListenableFuture<SendResult<Long, BookingAvroModel>> kafkaResultFuture) {
-        kafkaResultFuture.addCallback(new ListenableFutureCallback<SendResult<Long, BookingAvroModel>>() {
+                             ListenableFuture<SendResult<String, BookingAvroModel>> kafkaResultFuture) {
+        kafkaResultFuture.addCallback(new ListenableFutureCallback<SendResult<String, BookingAvroModel>>() {
             @Override
             public void onFailure(Throwable throwable) {
                 log.error("Error while sending message '{}' to topic '{}'", message.toString(), topicName, throwable);
             }
 
             @Override
-            public void onSuccess(SendResult<Long, BookingAvroModel> result) {
+            public void onSuccess(SendResult<String, BookingAvroModel> result) {
                 RecordMetadata metadata = result.getRecordMetadata();
                 log.debug("Received new metadata. Topic: {}, Partition: {}, Offset: {}, Timestamp: {}," +
                                 "at time: {}", metadata.topic(), metadata.partition(), metadata.offset(),
