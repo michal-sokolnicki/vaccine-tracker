@@ -1,6 +1,6 @@
 package com.vaccinetracker.booking.service;
 
-import com.vaccinetracker.booking.entity.BookingRequest;
+import com.vaccinetracker.booking.model.BookingRequest;
 
 public interface BookingService {
 

@@ -1,6 +1,6 @@
 package com.vaccinetracker.booking.service.transformer;
 
-import com.vaccinetracker.booking.entity.BookingRequest;
+import com.vaccinetracker.booking.model.BookingRequest;
 import com.vaccinetracker.elastic.model.entity.Status;
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 import org.springframework.stereotype.Component;

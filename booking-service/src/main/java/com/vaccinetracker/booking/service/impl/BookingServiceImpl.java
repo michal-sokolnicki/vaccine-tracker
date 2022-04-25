@@ -1,6 +1,6 @@
 package com.vaccinetracker.booking.service.impl;
 
-import com.vaccinetracker.booking.entity.BookingRequest;
+import com.vaccinetracker.booking.model.BookingRequest;
 import com.vaccinetracker.booking.service.BookingService;
 import com.vaccinetracker.booking.service.transformer.BookingToAvroTransformer;
 import com.vaccinetracker.booking.service.transformer.BookingToIndexModelTransformer;

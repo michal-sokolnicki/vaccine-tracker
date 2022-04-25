@@ -4,10 +4,12 @@ import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.entity.VaccineStock;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
+import com.vaccinetracker.vaccinecenter.model.VaccineCenterRequest;
 import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import com.vaccinetracker.vaccinecenter.service.transformer.ResponseModelToIndexModelTransformer;
+import com.vaccinetracker.vaccinecenter.service.transformer.VaccineCenterToIndexModelTransformer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,27 @@ import java.util.List;
 @Service
 public class VaccineCenterServiceImpl implements VaccineCenterService {
 
+    private final VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer;
     private final VaccineCenterQueryWebClient vaccineCenterQueryWebClient;
     private final ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer;
     private final ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient;
 
-    public VaccineCenterServiceImpl(VaccineCenterQueryWebClient vaccineCenterQueryWebClient, ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer, ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient) {
+    public VaccineCenterServiceImpl(VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer,
+                                    VaccineCenterQueryWebClient vaccineCenterQueryWebClient,
+                                    ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer,
+                                    ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient) {
+        this.vaccineCenterToIndexModelTransformer = vaccineCenterToIndexModelTransformer;
         this.vaccineCenterQueryWebClient = vaccineCenterQueryWebClient;
         this.responseModelToIndexModelTransformer = responseModelToIndexModelTransformer;
         this.elasticIndexClient = elasticIndexClient;
+    }
+
+    @Override
+    public void updateStock(String id, VaccineCenterRequest vaccineCenterRequest) {
+        VaccineCenterIndexModel vaccineCenterIndexModel =
+                vaccineCenterToIndexModelTransformer.getVaccineCenterIndexModel(id, vaccineCenterRequest);
+        log.info("Document with id: {} has been updated in elasticsearch", id);
+
     }
 
     @Override

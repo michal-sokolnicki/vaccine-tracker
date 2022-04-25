@@ -1,6 +1,6 @@
 package com.vaccinetracker.booking.service.transformer;
 
-import com.vaccinetracker.booking.entity.BookingRequest;
+import com.vaccinetracker.booking.model.BookingRequest;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
 import org.springframework.stereotype.Component;
 
