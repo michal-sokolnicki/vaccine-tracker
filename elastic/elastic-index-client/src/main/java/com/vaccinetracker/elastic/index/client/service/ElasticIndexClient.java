@@ -1,7 +1,6 @@
 package com.vaccinetracker.elastic.index.client.service;
 
 import com.vaccinetracker.elastic.model.IndexModel;
-import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 
 import java.util.List;
 

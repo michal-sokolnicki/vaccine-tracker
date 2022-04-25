@@ -2,7 +2,6 @@ package com.vaccinetracker.elastic.query.client.service;
 
 import com.vaccinetracker.elastic.model.IndexModel;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BookingElasticQueryClient<T extends IndexModel> {
