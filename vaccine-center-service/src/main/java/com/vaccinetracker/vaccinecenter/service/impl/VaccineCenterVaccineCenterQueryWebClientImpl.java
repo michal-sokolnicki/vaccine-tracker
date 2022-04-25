@@ -2,7 +2,7 @@ package com.vaccinetracker.vaccinecenter.service.impl;
 
 import com.vaccinetracker.config.QueryWebClientConfigData;
 import com.vaccinetracker.vaccinecenter.query.exception.QueryWebClientException;
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponseModel;
+import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -27,10 +27,10 @@ public class VaccineCenterVaccineCenterQueryWebClientImpl implements VaccineCent
     }
 
     @Override
-    public VaccineCenterQueryWebClientResponseModel getVaccineCenterById(String id) {
+    public VaccineCenterQueryWebClientResponse getVaccineCenterById(String id) {
         log.info("Querying by id: {}", id);
         WebClient.ResponseSpec responseSpec = getWebClient(queryWebClientConfigData.getQueryById().getUri() + id);
-        return responseSpec.bodyToMono(VaccineCenterQueryWebClientResponseModel.class)
+        return responseSpec.bodyToMono(VaccineCenterQueryWebClientResponse.class)
                 .block();
     }
     private WebClient.ResponseSpec getWebClient(String uri) {

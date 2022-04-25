@@ -1,13 +1,15 @@
 package com.vaccinetracker.query.service;
 
-import com.vaccinetracker.query.model.BookingQueryServiceResponseModel;
+import com.vaccinetracker.query.model.BookingQueryRequest;
+import com.vaccinetracker.query.model.BookingQueryResponse;
 
 import java.util.List;
 
 public interface BookingQueryService {
 
-    BookingQueryServiceResponseModel getBookingById(String id);
-    List<BookingQueryServiceResponseModel> getBookingByGovIdAndStatus(String govId, String status);
-    List<BookingQueryServiceResponseModel> getBookingHistoryByGovId(String govId);
-    List<BookingQueryServiceResponseModel> searchByText(String text);
+    BookingQueryResponse getBookingById(String id);
+    List<BookingQueryResponse> getBookingByGovIdAndStatus(String govId, String status);
+    List<BookingQueryResponse> getBookingHistoryByGovId(String govId);
+    List<BookingQueryResponse> getBookingByDateRange(BookingQueryRequest bookingQueryRequest);
+    List<BookingQueryResponse> searchByText(String text);
 }

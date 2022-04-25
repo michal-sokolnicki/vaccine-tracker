@@ -4,7 +4,7 @@ import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.entity.VaccineStock;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponseModel;
+import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import com.vaccinetracker.vaccinecenter.service.transformer.ResponseModelToIndexModelTransformer;
@@ -33,7 +33,7 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
     }
 
     private void processMessage(BookingAvroModel bookingAvroModel) {
-        VaccineCenterQueryWebClientResponseModel responseModel =
+        VaccineCenterQueryWebClientResponse responseModel =
                 vaccineCenterQueryWebClient.getVaccineCenterById(bookingAvroModel.getVaccineCenterId());
         responseModel.getVaccineStocks()
                 .forEach(vaccineStock -> reduceQuantity(vaccineStock, bookingAvroModel.getVaccineType()));

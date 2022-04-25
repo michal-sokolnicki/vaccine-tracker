@@ -1,53 +1,74 @@
 package com.vaccinetracker.query.service.impl;
 
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
-import com.vaccinetracker.elastic.query.client.service.ElasticQueryClient;
-import com.vaccinetracker.query.model.BookingQueryServiceResponseModel;
-import com.vaccinetracker.query.transformer.IndexModelToResponseModelTransformer;
+import com.vaccinetracker.elastic.query.client.service.BookingElasticQueryClient;
+import com.vaccinetracker.query.model.BookingQueryRequest;
+import com.vaccinetracker.query.model.BookingQueryResponse;
+import com.vaccinetracker.query.service.BookingQueryService;
+import com.vaccinetracker.query.transformer.IndexModelToResponseTransformer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
-public class BookingQueryServiceImpl implements com.vaccinetracker.query.service.BookingQueryService {
+public class BookingQueryServiceImpl implements BookingQueryService {
 
-    private final IndexModelToResponseModelTransformer indexModelToResponseModelTransformer;
-    private final ElasticQueryClient<BookingIndexModel> elasticQueryClient;
+    private final IndexModelToResponseTransformer indexModelToResponseTransformer;
+    private final BookingElasticQueryClient<BookingIndexModel> bookingElasticQueryClient;
 
-    public BookingQueryServiceImpl(IndexModelToResponseModelTransformer indexModelToResponseModelTransformer,
-                                   ElasticQueryClient<BookingIndexModel> elasticQueryClient) {
-        this.indexModelToResponseModelTransformer = indexModelToResponseModelTransformer;
-        this.elasticQueryClient = elasticQueryClient;
+    public BookingQueryServiceImpl(IndexModelToResponseTransformer indexModelToResponseTransformer,
+                                   BookingElasticQueryClient<BookingIndexModel> bookingElasticQueryClient) {
+        this.indexModelToResponseTransformer = indexModelToResponseTransformer;
+        this.bookingElasticQueryClient = bookingElasticQueryClient;
     }
 
     @Override
-    public BookingQueryServiceResponseModel getBookingById(String id) {
+    public BookingQueryResponse getBookingById(String id) {
         log.info("Querying document by id: {}", id);
-        BookingIndexModel bookingIndexModel = elasticQueryClient.getIndexModelById(id);
-        return indexModelToResponseModelTransformer.getBookingResponseModel(bookingIndexModel);
+        BookingIndexModel bookingIndexModel = bookingElasticQueryClient.getBookingById(id);
+        return indexModelToResponseTransformer.getBookingResponseModel(bookingIndexModel);
     }
 
     @Override
-    public List<BookingQueryServiceResponseModel> getBookingHistoryByGovId(String govId) {
+    public List<BookingQueryResponse> getBookingHistoryByGovId(String govId) {
         log.info("Querying documents by govId: {}", govId);
         List<BookingIndexModel> bookingIndexModels =
-                elasticQueryClient.getIndexModelsByField(govId);
-        return indexModelToResponseModelTransformer.getBookingResponseModels(bookingIndexModels);
+                bookingElasticQueryClient.getBookingByGovId(govId);
+        return indexModelToResponseTransformer.getBookingResponseModels(bookingIndexModels);
     }
 
     @Override
-    public List<BookingQueryServiceResponseModel> getBookingByGovIdAndStatus(String govId, String status) {
+    public List<BookingQueryResponse> getBookingByGovIdAndStatus(String govId, String status) {
         log.info("Querying documents by govId: {} and status: {}", govId, status);
-        List<BookingIndexModel> bookingIndexModels = elasticQueryClient.getIndexModelsByParams(govId, status);
-        return indexModelToResponseModelTransformer.getBookingResponseModels(bookingIndexModels);
+        List<BookingIndexModel> bookingIndexModels = bookingElasticQueryClient.getBookingByGovIdAndStatus(govId, status);
+        return indexModelToResponseTransformer.getBookingResponseModels(bookingIndexModels);
     }
 
     @Override
-    public List<BookingQueryServiceResponseModel> searchByText(String text) {
+    public List<BookingQueryResponse> getBookingByDateRange(BookingQueryRequest bookingQueryRequest) {
+        String from = bookingQueryRequest.getFrom();
+        String to = bookingQueryRequest.getTo();
+        List<BookingIndexModel> bookingIndexModels =  Optional.ofNullable(bookingQueryRequest.getGovId())
+                .map(govId -> {
+                    log.info("Querying documents by govId: {} and date from: {} to: {}", govId, from, to);
+                    return bookingElasticQueryClient.getByGovIdWithDateRange(govId, from, to);
+                })
+                .orElseGet(() -> {
+                    String vaccineCenterId = bookingQueryRequest.getVaccineCenterId();
+                    log.info("Querying documents by vaccineCenterId: {} and date from: {} to: {}",
+                            vaccineCenterId, from, to);
+                    return bookingElasticQueryClient.getByVaccineCenterIdWithDateRange(vaccineCenterId, from, to);
+                });
+        return indexModelToResponseTransformer.getBookingResponseModels(bookingIndexModels);
+    }
+
+    @Override
+    public List<BookingQueryResponse> searchByText(String text) {
         log.info("Searching all documents by text: {}", text);
-        List<BookingIndexModel> bookingIndexModels = elasticQueryClient.getIndexModelsByText(text);
-        return indexModelToResponseModelTransformer.getBookingResponseModels(bookingIndexModels);
+        List<BookingIndexModel> bookingIndexModels = bookingElasticQueryClient.searchBookingByText(text);
+        return indexModelToResponseTransformer.getBookingResponseModels(bookingIndexModels);
     }
 }

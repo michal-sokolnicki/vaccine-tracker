@@ -2,6 +2,7 @@ package com.vaccinetracker.elastic.query.client.repository.impl;
 
 import com.vaccinetracker.config.ElasticConfigData;
 import com.vaccinetracker.config.ElasticQueryConfigData;
+import com.vaccinetracker.elastic.model.entity.VaccineStock;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import com.vaccinetracker.elastic.query.client.repository.CustomizedVaccineCenterElasticsearchQueryRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.multiMatchQuery;
@@ -44,6 +46,7 @@ public class CustomizedVaccineCenterElasticsearchQueryRepositoryImpl implements
                 .must(getNestedQueryBuilder());
         NativeSearchQuery searchQueryBuilder = new NativeSearchQueryBuilder()
                 .withQuery(boolQueryBuilder)
+                .withFields(elasticQueryConfigData.getVaccineCenterSourceFields())
                 .build();
         return search(searchQueryBuilder, text);
     }
@@ -59,7 +62,8 @@ public class CustomizedVaccineCenterElasticsearchQueryRepositoryImpl implements
                 .rangeQuery(elasticQueryConfigData.getVaccineStockQuantityField()).gte(BigInteger.ZERO));
         return QueryBuilders.nestedQuery(elasticQueryConfigData.getVaccineStockPath(), query, ScoreMode.None)
                 .innerHit(new InnerHitBuilder().setFetchSourceContext(new FetchSourceContext(true,
-                        new String[] {elasticQueryConfigData.getVaccineStockNameField()}, new String[0])
+                        new String[] { elasticQueryConfigData.getVaccineStockNameField() },
+                        new String[] { "vaccine_stock.quantity", "vaccine_stock.reserve" })
         ));
     }
 
@@ -68,7 +72,26 @@ public class CustomizedVaccineCenterElasticsearchQueryRepositoryImpl implements
                 VaccineCenterIndexModel.class, IndexCoordinates.of(elasticConfigData.getVaccineCenterIndexName()));
         log.info("{} of documents with text {} retrieved successfully", searchResult.getTotalHits(), text);
         return searchResult.get()
+                .map(this::parseContent)
+                .collect(Collectors.toList());
+    }
+
+    private VaccineCenterIndexModel parseContent(SearchHit<VaccineCenterIndexModel> vaccineCenterIndexModelSearchHit) {
+        VaccineCenterIndexModel content = vaccineCenterIndexModelSearchHit.getContent();
+        return VaccineCenterIndexModel.builder()
+                .vaccineCenterId(content.getVaccineCenterId())
+                .name(content.getName())
+                .address(content.getAddress())
+                .vaccineStocks(getVaccineStock(vaccineCenterIndexModelSearchHit.getInnerHits()))
+                .build();
+    }
+
+    private List<VaccineStock> getVaccineStock(Map<String, SearchHits<?>> innerHits) {
+        return innerHits.get(elasticQueryConfigData.getVaccineStockPath()).get()
                 .map(SearchHit::getContent)
+                .map(content -> VaccineStock.builder()
+                        .name(((VaccineStock) content).getName())
+                        .build())
                 .collect(Collectors.toList());
     }
 }

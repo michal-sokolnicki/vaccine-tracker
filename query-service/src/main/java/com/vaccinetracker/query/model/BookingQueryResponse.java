@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookingQueryServiceResponseModel {
+public class BookingQueryResponse {
 
     private String id;
     private String firstname;

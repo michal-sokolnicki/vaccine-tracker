@@ -2,18 +2,18 @@ package com.vaccinetracker.query.transformer;
 
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
-import com.vaccinetracker.query.model.BookingQueryServiceResponseModel;
-import com.vaccinetracker.query.model.VaccineCenterQueryServiceResponseModel;
+import com.vaccinetracker.query.model.BookingQueryResponse;
+import com.vaccinetracker.query.model.VaccineCenterQueryResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class IndexModelToResponseModelTransformer {
+public class IndexModelToResponseTransformer {
 
-    public BookingQueryServiceResponseModel getBookingResponseModel(BookingIndexModel bookingIndexModel) {
-        return BookingQueryServiceResponseModel.builder()
+    public BookingQueryResponse getBookingResponseModel(BookingIndexModel bookingIndexModel) {
+        return BookingQueryResponse.builder()
                 .id(bookingIndexModel.getId())
                 .firstname(bookingIndexModel.getFirstname())
                 .surname(bookingIndexModel.getSurname())
@@ -27,15 +27,15 @@ public class IndexModelToResponseModelTransformer {
                 .build();
     }
 
-    public List<BookingQueryServiceResponseModel> getBookingResponseModels(List<BookingIndexModel> bookingIndexModels) {
+    public List<BookingQueryResponse> getBookingResponseModels(List<BookingIndexModel> bookingIndexModels) {
         return bookingIndexModels.stream()
                 .map(this::getBookingResponseModel)
                 .collect(Collectors.toList());
     }
 
-    public VaccineCenterQueryServiceResponseModel getVaccineCenterResponseModel(
+    public VaccineCenterQueryResponse getVaccineCenterResponseModel(
             VaccineCenterIndexModel vaccineCenterIndexModel) {
-        return VaccineCenterQueryServiceResponseModel.builder()
+        return VaccineCenterQueryResponse.builder()
                 .id(vaccineCenterIndexModel.getId())
                 .name(vaccineCenterIndexModel.getName())
                 .address(vaccineCenterIndexModel.getAddress())
@@ -43,7 +43,7 @@ public class IndexModelToResponseModelTransformer {
                 .build();
     }
 
-    public List<VaccineCenterQueryServiceResponseModel> getVaccineCenterResponseModels(
+    public List<VaccineCenterQueryResponse> getVaccineCenterResponseModels(
             List<VaccineCenterIndexModel> vaccineCenterIndexModels) {
         return vaccineCenterIndexModels.stream()
                 .map(this::getVaccineCenterResponseModel)

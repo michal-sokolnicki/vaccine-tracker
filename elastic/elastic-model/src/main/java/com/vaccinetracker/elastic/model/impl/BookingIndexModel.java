@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import static com.vaccinetracker.elastic.model.util.IndexModelUtil.BOOKING_FORMATTER;
+
 @Data
 @Builder
 @Document(indexName = "#{@elasticConfigData.bookingIndexName}")
 public class BookingIndexModel implements IndexModel {
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-            .withLocale(Locale.ENGLISH);
 
     @Id
     @Field("booking_id")
@@ -61,7 +60,7 @@ public class BookingIndexModel implements IndexModel {
     }
 
     public LocalDateTime getTerm() {
-        return LocalDateTime.parse(term, formatter);
+        return LocalDateTime.parse(term, BOOKING_FORMATTER);
     }
 
     public String getStringTerm() {

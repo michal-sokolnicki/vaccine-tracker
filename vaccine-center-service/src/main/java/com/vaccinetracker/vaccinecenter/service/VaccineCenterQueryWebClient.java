@@ -1,8 +1,8 @@
 package com.vaccinetracker.vaccinecenter.service;
 
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponseModel;
+import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
 
 public interface VaccineCenterQueryWebClient {
 
-    VaccineCenterQueryWebClientResponseModel getVaccineCenterById(String id);
+    VaccineCenterQueryWebClientResponse getVaccineCenterById(String id);
 }

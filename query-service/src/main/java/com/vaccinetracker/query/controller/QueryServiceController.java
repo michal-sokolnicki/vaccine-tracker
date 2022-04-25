@@ -1,7 +1,8 @@
 package com.vaccinetracker.query.controller;
 
-import com.vaccinetracker.query.model.BookingQueryServiceResponseModel;
-import com.vaccinetracker.query.model.VaccineCenterQueryServiceResponseModel;
+import com.vaccinetracker.query.model.BookingQueryRequest;
+import com.vaccinetracker.query.model.BookingQueryResponse;
+import com.vaccinetracker.query.model.VaccineCenterQueryResponse;
 import com.vaccinetracker.query.service.BookingQueryService;
 import com.vaccinetracker.query.service.VaccineCenterQueryService;
 import org.springframework.http.ResponseEntity;
@@ -21,46 +22,54 @@ public class QueryServiceController {
     }
 
     @GetMapping("/booking/{id}")
-    public ResponseEntity<BookingQueryServiceResponseModel> getBookingById(@PathVariable("id") final String id) {
-        BookingQueryServiceResponseModel bookingQueryServiceResponseModel = bookingQueryService.getBookingById(id);
-        return ResponseEntity.ok(bookingQueryServiceResponseModel);
+    public ResponseEntity<BookingQueryResponse> getBookingById(@PathVariable("id") final String id) {
+        BookingQueryResponse bookingQueryResponse = bookingQueryService.getBookingById(id);
+        return ResponseEntity.ok(bookingQueryResponse);
     }
 
     @GetMapping("/booking/{govId}/history")
-    public ResponseEntity<List<BookingQueryServiceResponseModel>> getBookingHistoryByGovId(
+    public ResponseEntity<List<BookingQueryResponse>> getBookingHistoryByGovId(
             @PathVariable("govId") final String govId) {
-        List<BookingQueryServiceResponseModel> bookingQueryServiceResponseModels = bookingQueryService.getBookingHistoryByGovId(govId);
-        return ResponseEntity.ok(bookingQueryServiceResponseModels);
+        List<BookingQueryResponse> bookingQueryResponses = bookingQueryService.getBookingHistoryByGovId(govId);
+        return ResponseEntity.ok(bookingQueryResponses);
     }
 
     @GetMapping("/booking/{govId}/{status}")
-    public ResponseEntity<List<BookingQueryServiceResponseModel>> getBookingByGovIdAndStatus(
+    public ResponseEntity<List<BookingQueryResponse>> getBookingByGovIdAndStatus(
             @PathVariable("govId") final String govId, @PathVariable("status") final String status) {
-        List<BookingQueryServiceResponseModel> bookingQueryServiceResponseModels =
+        List<BookingQueryResponse> bookingQueryResponses =
                 bookingQueryService.getBookingByGovIdAndStatus(govId, status);
-        return ResponseEntity.ok(bookingQueryServiceResponseModels);
+        return ResponseEntity.ok(bookingQueryResponses);
+    }
+
+    @PostMapping("/booking/range")
+    public ResponseEntity<List<BookingQueryResponse>> getBookingByDateRange(
+            @RequestBody final BookingQueryRequest bookingQueryRequest) {
+        List<BookingQueryResponse> bookingQueryResponses =
+                bookingQueryService.getBookingByDateRange(bookingQueryRequest);
+        return ResponseEntity.ok(bookingQueryResponses);
     }
 
     @GetMapping("/booking/search")
-    public ResponseEntity<List<BookingQueryServiceResponseModel>> searchBookingByText(
+    public ResponseEntity<List<BookingQueryResponse>> searchBookingByText(
             @RequestParam("text") final String text) {
-        List<BookingQueryServiceResponseModel> bookingQueryServiceResponseModels = bookingQueryService.searchByText(text);
-        return ResponseEntity.ok(bookingQueryServiceResponseModels);
+        List<BookingQueryResponse> bookingQueryResponses = bookingQueryService.searchByText(text);
+        return ResponseEntity.ok(bookingQueryResponses);
     }
 
     @GetMapping("/vaccinecenter/{id}")
-    public ResponseEntity<VaccineCenterQueryServiceResponseModel> getVaccineCenterById(
+    public ResponseEntity<VaccineCenterQueryResponse> getVaccineCenterById(
             @PathVariable("id") final String id) {
-        VaccineCenterQueryServiceResponseModel vaccineCenterQueryServiceResponseModel =
+        VaccineCenterQueryResponse vaccineCenterQueryResponse =
                 vaccineCenterQueryService.getVaccineCenterById(id);
-        return ResponseEntity.ok(vaccineCenterQueryServiceResponseModel);
+        return ResponseEntity.ok(vaccineCenterQueryResponse);
     }
 
     @GetMapping("/vaccinecenter/search")
-    public ResponseEntity<List<VaccineCenterQueryServiceResponseModel>> searchVaccineCenterByText(
+    public ResponseEntity<List<VaccineCenterQueryResponse>> searchVaccineCenterByText(
             @RequestParam("text") final String text) {
-        List<VaccineCenterQueryServiceResponseModel> vaccineCenterQueryServiceResponseModels =
+        List<VaccineCenterQueryResponse> vaccineCenterQueryResponses =
                 vaccineCenterQueryService.searchByText(text);
-        return ResponseEntity.ok(vaccineCenterQueryServiceResponseModels);
+        return ResponseEntity.ok(vaccineCenterQueryResponses);
     }
 }

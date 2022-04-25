@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VaccineCenterQueryWebClientResponseModel {
+public class VaccineCenterQueryWebClientResponse {
 
     private String id;
     private String name;
