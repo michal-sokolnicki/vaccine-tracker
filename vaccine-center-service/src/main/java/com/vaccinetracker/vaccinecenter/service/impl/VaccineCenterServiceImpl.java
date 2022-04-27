@@ -11,6 +11,7 @@ import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import com.vaccinetracker.vaccinecenter.service.transformer.ResponseModelToIndexModelTransformer;
 import com.vaccinetracker.vaccinecenter.service.transformer.VaccineCenterToIndexModelTransformer;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,8 +39,8 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
     public void updateStock(String id, VaccineCenterRequest vaccineCenterRequest) {
         VaccineCenterIndexModel vaccineCenterIndexModel =
                 vaccineCenterToIndexModelTransformer.getVaccineCenterIndexModel(id, vaccineCenterRequest);
+        elasticIndexClient.save(vaccineCenterIndexModel);
         log.info("Document with id: {} has been updated in elasticsearch", id);
-
     }
 
     @Override

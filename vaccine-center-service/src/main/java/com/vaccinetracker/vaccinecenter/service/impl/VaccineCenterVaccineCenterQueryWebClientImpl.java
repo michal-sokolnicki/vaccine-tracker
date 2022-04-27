@@ -1,6 +1,7 @@
 package com.vaccinetracker.vaccinecenter.service.impl;
 
 import com.vaccinetracker.config.QueryWebClientConfigData;
+import com.vaccinetracker.config.UserConfigData;
 import com.vaccinetracker.vaccinecenter.query.exception.QueryWebClientException;
 import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
@@ -18,12 +19,15 @@ import reactor.core.publisher.Mono;
 @Service
 public class VaccineCenterVaccineCenterQueryWebClientImpl implements VaccineCenterQueryWebClient {
 
+    @Qualifier("webClientBuilder")
     private final WebClient.Builder webClientBuilder;
     private final QueryWebClientConfigData queryWebClientConfigData;
+    private final UserConfigData userConfigData;
 
-    public VaccineCenterVaccineCenterQueryWebClientImpl(@Qualifier("webClientBuilder") WebClient.Builder webClientBuilder, QueryWebClientConfigData queryWebClientConfigData) {
+    public VaccineCenterVaccineCenterQueryWebClientImpl(@Qualifier("webClientBuilder") WebClient.Builder webClientBuilder, QueryWebClientConfigData queryWebClientConfigData, UserConfigData userConfigData) {
         this.webClientBuilder = webClientBuilder;
         this.queryWebClientConfigData = queryWebClientConfigData;
+        this.userConfigData = userConfigData;
     }
 
     @Override
@@ -36,7 +40,9 @@ public class VaccineCenterVaccineCenterQueryWebClientImpl implements VaccineCent
     private WebClient.ResponseSpec getWebClient(String uri) {
         return webClientBuilder.build()
                 .method(HttpMethod.GET)
-                .uri(uri)
+                .uri(queryWebClientConfigData.getWebClient().getBaseUrl() + uri)
+                .headers(httpHeaders ->
+                        httpHeaders.setBasicAuth(userConfigData.getUsername(), userConfigData.getPassword()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(

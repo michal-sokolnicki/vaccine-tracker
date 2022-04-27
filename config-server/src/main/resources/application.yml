@@ -1,11 +1,6 @@
 server:
   port: 8181
 
-logging:
-  level:
-    ROOT: INFO
-    org.spring.framework.cloud.config: INFO
-
 spring:
   application:
     name: configserver

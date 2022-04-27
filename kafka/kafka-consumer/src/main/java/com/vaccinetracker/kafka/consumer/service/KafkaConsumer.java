@@ -1,6 +1,7 @@
-package com.vaccinetracker.vaccinecenter.consumer;
+package com.vaccinetracker.kafka.consumer.service;
 
 import org.apache.avro.specific.SpecificRecordBase;
+import org.springframework.kafka.support.Acknowledgment;
 
 import java.io.Serializable;
 import java.util.List;

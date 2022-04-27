@@ -1,15 +1,17 @@
-package com.vaccinetracker.user.consumer.impl;
+package com.vaccinetracker.vaccinecenter.consumer;
 
 import com.vaccinetracker.config.KafkaConfigData;
 import com.vaccinetracker.config.KafkaConsumerConfigData;
 import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
-import com.vaccinetracker.user.consumer.KafkaConsumer;
+import com.vaccinetracker.kafka.consumer.service.KafkaConsumer;
+import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -20,19 +22,22 @@ import java.util.Objects;
 
 @Slf4j
 @Service
-public class UserServiceKafkaConsumer implements KafkaConsumer<Long, BookingAvroModel> {
+public class VaccineCenterKafkaConsumer implements KafkaConsumer<String, BookingAvroModel> {
 
     private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
     private final KafkaAdminClient kafkaAdminClient;
     private final KafkaConfigData kafkaConfigData;
     private final KafkaConsumerConfigData kafkaConsumerConfigData;
+    private final VaccineCenterService vaccineCenterService;
 
-    public UserServiceKafkaConsumer(KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry,
-                                    KafkaAdminClient kafkaAdminClient, KafkaConfigData kafkaConfigData, KafkaConsumerConfigData kafkaConsumerConfigData) {
+    public VaccineCenterKafkaConsumer(KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry,
+                                      KafkaAdminClient kafkaAdminClient, KafkaConfigData kafkaConfigData,
+                                      KafkaConsumerConfigData kafkaConsumerConfigData, VaccineCenterService vaccineCenterService) {
         this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
         this.kafkaAdminClient = kafkaAdminClient;
         this.kafkaConfigData = kafkaConfigData;
         this.kafkaConsumerConfigData = kafkaConsumerConfigData;
+        this.vaccineCenterService = vaccineCenterService;
     }
 
     @EventListener
@@ -51,6 +56,6 @@ public class UserServiceKafkaConsumer implements KafkaConsumer<Long, BookingAvro
         log.info("Kafka listener has been woke up and has received {} number of message with keys {}, " +
                         "partitions {} and offsets {} and will be send to elastic: Thread id {}",
                 messages.size(), keys, partitions.toString(),offsets.toString(), Thread.currentThread().getId());
-
+        vaccineCenterService.processMessages(messages);
     }
 }
