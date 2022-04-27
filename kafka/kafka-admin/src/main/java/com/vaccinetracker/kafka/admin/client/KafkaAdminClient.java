@@ -43,8 +43,8 @@ public class KafkaAdminClient {
         CreateTopicsResult createTopicsResult;
         try {
             createTopicsResult = retryTemplate.execute(this::createKafkaTopics);
-        } catch (Throwable t) {
-            throw new KafkaClientException("Reached max number of retry creating kafka topic(s)!", t);
+        } catch (Exception e) {
+            throw new KafkaClientException("Reached max number of retry creating kafka topic(s)!", e);
         }
         checkTopicsCreated();
     }
@@ -61,8 +61,8 @@ public class KafkaAdminClient {
         Collection<TopicListing> topics;
         try {
             topics = retryTemplate.execute(this::getKafkaTopics);
-        } catch (Throwable t) {
-            throw new KafkaClientException("Reached max number of retry reading kafka topic(s)!", t);
+        } catch (Exception e) {
+            throw new KafkaClientException("Reached max number of retry reading kafka topic(s)!", e);
         }
         return topics;
     }

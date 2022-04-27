@@ -12,7 +12,7 @@ public abstract class ElasticRepositoryQueryClientBase<T extends IndexModel> {
 
     private final ElasticsearchRepository<T, String> elasticsearchRepository;
 
-    public ElasticRepositoryQueryClientBase(ElasticsearchRepository<T, String> elasticsearchRepository) {
+    protected ElasticRepositoryQueryClientBase(ElasticsearchRepository<T, String> elasticsearchRepository) {
         this.elasticsearchRepository = elasticsearchRepository;
     }
 
