@@ -9,11 +9,13 @@ import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
 import com.vaccinetracker.kafka.producer.service.KafkaProducer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
     private final BookingToIndexModelTransformer bookingToIndexModelTransformer;
@@ -21,17 +23,6 @@ public class BookingServiceImpl implements BookingService {
     private final KafkaConfigData kafkaConfigData;
     private final KafkaProducer<String, BookingAvroModel> kafkaProducer;
     private final BookingToAvroTransformer bookingToAvroTransformer;
-
-    public BookingServiceImpl(BookingToIndexModelTransformer bookingToIndexModelTransformer,
-                              ElasticIndexClient<BookingIndexModel> elasticIndexClient,
-                              KafkaConfigData kafkaConfigData, KafkaProducer<String, BookingAvroModel> kafkaProducer,
-                              BookingToAvroTransformer bookingToAvroTransformer) {
-        this.bookingToIndexModelTransformer = bookingToIndexModelTransformer;
-        this.elasticIndexClient = elasticIndexClient;
-        this.kafkaConfigData = kafkaConfigData;
-        this.kafkaProducer = kafkaProducer;
-        this.bookingToAvroTransformer = bookingToAvroTransformer;
-    }
 
     @Override
     public void booking(BookingRequest bookingRequest) {

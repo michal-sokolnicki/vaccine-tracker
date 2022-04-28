@@ -6,6 +6,7 @@ import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
 import com.vaccinetracker.kafka.consumer.service.KafkaConsumer;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
@@ -22,6 +23,7 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class VaccineCenterKafkaConsumer implements KafkaConsumer<String, BookingAvroModel> {
 
     private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
@@ -29,16 +31,6 @@ public class VaccineCenterKafkaConsumer implements KafkaConsumer<String, Booking
     private final KafkaConfigData kafkaConfigData;
     private final KafkaConsumerConfigData kafkaConsumerConfigData;
     private final VaccineCenterService vaccineCenterService;
-
-    public VaccineCenterKafkaConsumer(KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry,
-                                      KafkaAdminClient kafkaAdminClient, KafkaConfigData kafkaConfigData,
-                                      KafkaConsumerConfigData kafkaConsumerConfigData, VaccineCenterService vaccineCenterService) {
-        this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
-        this.kafkaAdminClient = kafkaAdminClient;
-        this.kafkaConfigData = kafkaConfigData;
-        this.kafkaConsumerConfigData = kafkaConsumerConfigData;
-        this.vaccineCenterService = vaccineCenterService;
-    }
 
     @EventListener
     public void onAppStarted(ApplicationStartedEvent event){

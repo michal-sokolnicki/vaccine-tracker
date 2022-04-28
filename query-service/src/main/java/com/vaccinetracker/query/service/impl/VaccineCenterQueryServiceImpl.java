@@ -5,6 +5,7 @@ import com.vaccinetracker.elastic.query.client.service.VaccineCenterElasticQuery
 import com.vaccinetracker.query.model.VaccineCenterQueryResponse;
 import com.vaccinetracker.query.service.VaccineCenterQueryService;
 import com.vaccinetracker.query.transformer.IndexModelToResponseTransformer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,11 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class VaccineCenterQueryServiceImpl implements VaccineCenterQueryService {
 
     private final IndexModelToResponseTransformer indexModelToResponseTransformer;
     private final VaccineCenterElasticQueryClient<VaccineCenterIndexModel> vaccineCenterElasticQueryClient;
-
-    public VaccineCenterQueryServiceImpl(IndexModelToResponseTransformer indexModelToResponseTransformer,
-                                         VaccineCenterElasticQueryClient<VaccineCenterIndexModel> vaccineCenterElasticQueryClient) {
-        this.indexModelToResponseTransformer = indexModelToResponseTransformer;
-        this.vaccineCenterElasticQueryClient = vaccineCenterElasticQueryClient;
-    }
 
     @Override
     public VaccineCenterQueryResponse getVaccineCenterById(String id) {

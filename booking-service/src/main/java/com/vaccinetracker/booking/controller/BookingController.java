@@ -2,19 +2,17 @@ package com.vaccinetracker.booking.controller;
 
 import com.vaccinetracker.booking.model.BookingRequest;
 import com.vaccinetracker.booking.service.impl.BookingServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/vaccine/booking")
 public class BookingController {
 
     private final BookingServiceImpl bookingService;
-
-    public BookingController(BookingServiceImpl bookingService) {
-        this.bookingService = bookingService;
-    }
 
     @PostMapping
     public ResponseEntity<String> booking(@RequestBody final BookingRequest bookingRequest) {

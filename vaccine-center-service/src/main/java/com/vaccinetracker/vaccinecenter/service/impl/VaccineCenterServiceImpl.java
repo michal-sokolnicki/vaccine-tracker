@@ -10,6 +10,7 @@ import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import com.vaccinetracker.vaccinecenter.service.transformer.ResponseModelToIndexModelTransformer;
 import com.vaccinetracker.vaccinecenter.service.transformer.VaccineCenterToIndexModelTransformer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
@@ -18,22 +19,13 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class VaccineCenterServiceImpl implements VaccineCenterService {
 
     private final VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer;
     private final VaccineCenterQueryWebClient vaccineCenterQueryWebClient;
     private final ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer;
     private final ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient;
-
-    public VaccineCenterServiceImpl(VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer,
-                                    VaccineCenterQueryWebClient vaccineCenterQueryWebClient,
-                                    ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer,
-                                    ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient) {
-        this.vaccineCenterToIndexModelTransformer = vaccineCenterToIndexModelTransformer;
-        this.vaccineCenterQueryWebClient = vaccineCenterQueryWebClient;
-        this.responseModelToIndexModelTransformer = responseModelToIndexModelTransformer;
-        this.elasticIndexClient = elasticIndexClient;
-    }
 
     @Override
     public void updateStock(String id, VaccineCenterRequest vaccineCenterRequest) {

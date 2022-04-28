@@ -6,6 +6,7 @@ import com.vaccinetracker.query.model.BookingQueryRequest;
 import com.vaccinetracker.query.model.BookingQueryResponse;
 import com.vaccinetracker.query.service.BookingQueryService;
 import com.vaccinetracker.query.transformer.IndexModelToResponseTransformer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +15,11 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BookingQueryServiceImpl implements BookingQueryService {
 
     private final IndexModelToResponseTransformer indexModelToResponseTransformer;
     private final BookingElasticQueryClient<BookingIndexModel> bookingElasticQueryClient;
-
-    public BookingQueryServiceImpl(IndexModelToResponseTransformer indexModelToResponseTransformer,
-                                   BookingElasticQueryClient<BookingIndexModel> bookingElasticQueryClient) {
-        this.indexModelToResponseTransformer = indexModelToResponseTransformer;
-        this.bookingElasticQueryClient = bookingElasticQueryClient;
-    }
 
     @Override
     public BookingQueryResponse getBookingById(String id) {
