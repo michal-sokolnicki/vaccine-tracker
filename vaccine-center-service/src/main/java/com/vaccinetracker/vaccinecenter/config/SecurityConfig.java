@@ -1,6 +1,7 @@
 package com.vaccinetracker.vaccinecenter.config;
 
 import com.vaccinetracker.config.UserConfigData;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,13 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserConfigData userConfigData;
-
-    public SecurityConfig(UserConfigData userConfigData) {
-        this.userConfigData = userConfigData;
-    }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {

@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 @Service
 public class VaccineCenterVaccineCenterQueryWebClientImpl implements VaccineCenterQueryWebClient {
 
-    @Qualifier("webClientBuilder")
     private final WebClient.Builder webClientBuilder;
     private final QueryWebClientConfigData queryWebClientConfigData;
     private final UserConfigData userConfigData;

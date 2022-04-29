@@ -5,12 +5,12 @@ import com.vaccinetracker.config.KafkaConsumerConfigData;
 import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
 import com.vaccinetracker.kafka.consumer.service.KafkaConsumer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -21,20 +21,13 @@ import java.util.Objects;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceKafkaConsumer implements KafkaConsumer<String, BookingAvroModel> {
 
     private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
     private final KafkaAdminClient kafkaAdminClient;
     private final KafkaConfigData kafkaConfigData;
     private final KafkaConsumerConfigData kafkaConsumerConfigData;
-
-    public UserServiceKafkaConsumer(KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry,
-                                    KafkaAdminClient kafkaAdminClient, KafkaConfigData kafkaConfigData, KafkaConsumerConfigData kafkaConsumerConfigData) {
-        this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
-        this.kafkaAdminClient = kafkaAdminClient;
-        this.kafkaConfigData = kafkaConfigData;
-        this.kafkaConsumerConfigData = kafkaConsumerConfigData;
-    }
 
     @EventListener
     public void onAppStarted(ApplicationStartedEvent event){
