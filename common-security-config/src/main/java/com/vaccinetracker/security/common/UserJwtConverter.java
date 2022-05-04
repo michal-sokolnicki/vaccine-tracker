@@ -1,5 +1,6 @@
-package com.vaccinetracker.query.security;
+package com.vaccinetracker.security.common;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -12,27 +13,27 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.vaccinetracker.query.Constants.NA;
+import static com.vaccinetracker.security.Constants.NA;
 
 @RequiredArgsConstructor
-public class QueryUserJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+public class UserJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
     private static final String REALM_ACCESS_CLAIM = "realm_access";
     private static final String ROLES_CLAIM = "roles";
     private static final String SCOPE_CLAIM = "scope";
-    private static final String USERNAME_CLAIM = "preferred_username";
     private static final String DEFAULT_ROLE_PREFIX = "ROLE_";
     private static final String DEFAULT_SCOPE_PREFIX = "SCOPE_";
     private static final String SCOPE_SEPARATOR = " ";
 
-    private final QueryUserDetailsService queryUserDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Override
-    public AbstractAuthenticationToken convert(Jwt jwt) {
+    public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
         Collection<GrantedAuthority> authoritiesFromJwt = getAuthoritiesFromJwt(jwt);
-        return Optional.ofNullable(queryUserDetailsService.loadUserByUsername(jwt.getClaimAsString(USERNAME_CLAIM)))
-                .map(userDetails -> {
-                    ((QueryUser) userDetails).setAuthorities(authoritiesFromJwt);
+        return Optional.ofNullable(jwt.getClaims())
+                .map(claims -> {
+                    UserDetails userDetails = userDetailsService.getUserDetails(claims);
+                    userDetails.setAuthorities(authoritiesFromJwt);
                     return new UsernamePasswordAuthenticationToken(userDetails, NA, authoritiesFromJwt);
                 })
                 .orElseThrow(() -> new BadCredentialsException("User could not be found!"));

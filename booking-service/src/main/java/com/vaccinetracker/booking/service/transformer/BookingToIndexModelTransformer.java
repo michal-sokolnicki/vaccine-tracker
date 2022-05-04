@@ -3,6 +3,8 @@ package com.vaccinetracker.booking.service.transformer;
 import com.vaccinetracker.booking.model.BookingRequest;
 import com.vaccinetracker.elastic.model.entity.Status;
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
+import com.vaccinetracker.security.common.UserContext;
+import com.vaccinetracker.security.common.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -20,9 +22,10 @@ public class BookingToIndexModelTransformer {
 
     private void fillBuilderWithData(
             BookingIndexModel.BookingIndexModelBuilder builder, BookingRequest bookingRequest) {
-        builder.firstname(bookingRequest.getFirstname())
-                .surname(bookingRequest.getSurname())
-                .govId(bookingRequest.getGovId())
+        UserDetails userDetails = UserContext.getUserDetails();
+        builder.firstname(userDetails.getFirstname())
+                .surname(userDetails.getLastname())
+                .govId(userDetails.getGovId())
                 .vaccineCenterId(bookingRequest.getVaccineCenterId())
                 .vaccineCenterName(bookingRequest.getVaccineCenterName())
                 .address(bookingRequest.getAddress())

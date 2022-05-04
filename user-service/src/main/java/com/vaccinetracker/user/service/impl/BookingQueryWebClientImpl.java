@@ -1,11 +1,9 @@
-package com.vaccinetracker.vaccinecenter.service.impl;
+package com.vaccinetracker.user.service.impl;
 
 import com.vaccinetracker.config.QueryWebClientConfigData;
-import com.vaccinetracker.config.UserConfigData;
-import com.vaccinetracker.vaccinecenter.query.exception.QueryWebClientException;
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
-import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
-import lombok.RequiredArgsConstructor;
+import com.vaccinetracker.user.query.exception.QueryWebClientException;
+import com.vaccinetracker.user.query.model.UserQueryWebClientResponse;
+import com.vaccinetracker.user.service.BookingQueryWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -16,30 +14,37 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
+import java.util.List;
+
 @Slf4j
 @Service
-@RequiredArgsConstructor
-public class VaccineCenterVaccineCenterQueryWebClientImpl implements VaccineCenterQueryWebClient {
+public class BookingQueryWebClientImpl implements BookingQueryWebClient {
 
     private final WebClient.Builder webClientBuilder;
     private final QueryWebClientConfigData queryWebClientConfigData;
-    private final UserConfigData userConfigData;
+
+    public BookingQueryWebClientImpl(@Qualifier("web-client-builder") WebClient.Builder clientBuilder,
+                                     QueryWebClientConfigData queryWebClientConfigData) {
+        this.webClientBuilder = clientBuilder;
+        this.queryWebClientConfigData = queryWebClientConfigData;
+    }
 
     @Override
-    public VaccineCenterQueryWebClientResponse getVaccineCenterById(String id) {
-        log.info("Querying by id: {}", id);
+    public List<UserQueryWebClientResponse> getBookingByGovId(String govId) {
+        log.info("Querying by govId: {}", govId);
         WebClient.ResponseSpec responseSpec = getWebClient(
-                queryWebClientConfigData.getQueryVaccineCenterPath().getBaseUri() + id);
-        return responseSpec.bodyToMono(VaccineCenterQueryWebClientResponse.class)
-                .block();
+                queryWebClientConfigData.getQueryBookingPath().getOwnedUri() + govId);
+        return responseSpec.bodyToFlux(UserQueryWebClientResponse.class)
+                .collectList()
+                .blockOptional()
+                .orElseGet(Collections::emptyList);
     }
 
     private WebClient.ResponseSpec getWebClient(String uri) {
         return webClientBuilder.build()
                 .method(HttpMethod.GET)
-                .uri(queryWebClientConfigData.getWebClient().getBaseUrl() + uri)
-                .headers(httpHeaders ->
-                        httpHeaders.setBasicAuth(userConfigData.getUsername(), userConfigData.getPassword()))
+                .uri(uri)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(

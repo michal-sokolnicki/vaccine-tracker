@@ -1,81 +1,68 @@
 package com.vaccinetracker.user.config;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import com.vaccinetracker.security.common.UserJwtConverter;
+import com.vaccinetracker.security.common.UserDetailsService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-@Slf4j
 @Configuration
-@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String GROUPS_CLAIM = "groups";
-    private static final String ROLE_PREFIX = "ROLE_";
+    private final UserDetailsService userDetailsService;
+    private final OAuth2ResourceServerProperties oAuth2ResourceServerProperties;
+    private final OAuth2TokenValidator<Jwt> audienceValidator;
 
-    private final ClientRegistrationRepository clientRegistrationRepository;
-
-    @Value("${security.logout-success-url}")
-    private String logoutSuccessUrl;
-
-    protected OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
-        OidcClientInitiatedLogoutSuccessHandler successHandler =
-                new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-        successHandler.setPostLogoutRedirectUri(logoutSuccessUrl);
-        return successHandler;
+    public SecurityConfig(UserDetailsService userDetailsService,
+                          OAuth2ResourceServerProperties oAuth2ResourceServerProperties,
+                          @Qualifier("service-audience-validator") OAuth2TokenValidator<Jwt> audienceValidator) {
+        this.userDetailsService = userDetailsService;
+        this.oAuth2ResourceServerProperties = oAuth2ResourceServerProperties;
+        this.audienceValidator = audienceValidator;
     }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests()
-                .antMatchers("/").permitAll()
+        httpSecurity.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf()
+                .disable()
+                .authorizeRequests()
+                .antMatchers("/vaccine/user/registration").permitAll()
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()
-                .logout()
-                .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                .and()
-                .oauth2Client()
-                .and()
-                .oauth2Login()
-                .userInfoEndpoint()
-                .userAuthoritiesMapper(userAuthoritiesMapper());
+                .oauth2ResourceServer()
+                .jwt()
+                .decoder(jwtDecoder())
+                .jwtAuthenticationConverter(userJwtConverter());
     }
 
-    private GrantedAuthoritiesMapper userAuthoritiesMapper() {
-        return (authorities) -> {
-            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
-            authorities.forEach(authority -> {
-                        if (authority instanceof OidcUserAuthority) {
-                            OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
-                            OidcIdToken oidcIdToken = oidcUserAuthority.getIdToken();
-                            log.info("Username from id token: {}", oidcIdToken.getPreferredUsername());
-                            OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
+    @Bean
+    public Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter() {
+        return new UserJwtConverter(userDetailsService);
+    }
 
-                            List<SimpleGrantedAuthority> groupAuthorities =
-                                    userInfo.getClaimAsStringList(GROUPS_CLAIM).stream()
-                                            .map(group ->
-                                                    new SimpleGrantedAuthority(ROLE_PREFIX + group.toUpperCase()))
-                                            .collect(Collectors.toList());
-                            mappedAuthorities.addAll(groupAuthorities);
-                        }
-                    });
-            return mappedAuthorities;
-        };
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(
+                oAuth2ResourceServerProperties.getJwt().getIssuerUri());
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(
+                oAuth2ResourceServerProperties.getJwt().getIssuerUri());
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+        jwtDecoder.setJwtValidator(withAudience);
+        return jwtDecoder;
     }
 }

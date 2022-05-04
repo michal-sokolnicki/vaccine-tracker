@@ -6,9 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "query-service")
-public class QueryServiceConfigData {
+@ConfigurationProperties(prefix = "security-service")
+public class SecurityServiceConfigData {
 
-    private String version;
     private String customAudience;
 }

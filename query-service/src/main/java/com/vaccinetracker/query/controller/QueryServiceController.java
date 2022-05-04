@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,32 +22,25 @@ public class QueryServiceController {
     private final BookingQueryService bookingQueryService;
     private final VaccineCenterQueryService vaccineCenterQueryService;
 
-    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
+    @GetMapping("/booking/owned/{govId}")
+    @PreAuthorize("hasAuthority('SCOPE_PERSON_SCOPE')")
+    public ResponseEntity<List<BookingQueryResponse>> getBookingByGovId(
+            @PathVariable("govId") final String govId, @RequestParam(required = false) final String status) {
+        List<BookingQueryResponse> bookingQueryResponses = Optional.ofNullable(status)
+                .map(s -> bookingQueryService.getBookingByGovIdAndStatus(govId, s))
+                .orElseGet(() -> bookingQueryService.getBookingByGovId(govId));
+        return ResponseEntity.ok(bookingQueryResponses);
+    }
+
     @GetMapping("/booking/{id}")
+    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
     public ResponseEntity<BookingQueryResponse> getBookingById(@PathVariable("id") final String id) {
         BookingQueryResponse bookingQueryResponse = bookingQueryService.getBookingById(id);
         return ResponseEntity.ok(bookingQueryResponse);
     }
 
-    @PreAuthorize("hasRole('PERSON_ROLE')")
-    @GetMapping("/booking/{govId}/history")
-    public ResponseEntity<List<BookingQueryResponse>> getBookingHistoryByGovId(
-            @PathVariable("govId") final String govId) {
-        List<BookingQueryResponse> bookingQueryResponses = bookingQueryService.getBookingHistoryByGovId(govId);
-        return ResponseEntity.ok(bookingQueryResponses);
-    }
-
-    @PreAuthorize("hasRole('PERSON_ROLE')")
-    @GetMapping("/booking/{govId}/{status}")
-    public ResponseEntity<List<BookingQueryResponse>> getBookingByGovIdAndStatus(
-            @PathVariable("govId") final String govId, @PathVariable("status") final String status) {
-        List<BookingQueryResponse> bookingQueryResponses =
-                bookingQueryService.getBookingByGovIdAndStatus(govId, status);
-        return ResponseEntity.ok(bookingQueryResponses);
-    }
-
-    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
     @PostMapping("/booking/range")
+    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
     public ResponseEntity<List<BookingQueryResponse>> getBookingByDateRange(
             @RequestBody final BookingQueryRequest bookingQueryRequest) {
         List<BookingQueryResponse> bookingQueryResponses =
@@ -54,16 +48,16 @@ public class QueryServiceController {
         return ResponseEntity.ok(bookingQueryResponses);
     }
 
-    @PreAuthorize("hasRole('PERSON_ROLE')")
     @GetMapping("/booking/search")
+    @PreAuthorize("hasRole('PERSON_ROLE')")
     public ResponseEntity<List<BookingQueryResponse>> searchBookingByText(
             @RequestParam("text") final String text) {
         List<BookingQueryResponse> bookingQueryResponses = bookingQueryService.searchByText(text);
         return ResponseEntity.ok(bookingQueryResponses);
     }
 
-    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
     @GetMapping("/vaccinecenter/{id}")
+    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
     public ResponseEntity<VaccineCenterQueryResponse> getVaccineCenterById(
             @PathVariable("id") final String id) {
         VaccineCenterQueryResponse vaccineCenterQueryResponse =
@@ -71,8 +65,8 @@ public class QueryServiceController {
         return ResponseEntity.ok(vaccineCenterQueryResponse);
     }
 
-    @PreAuthorize("hasRole('PERSON_ROLE')")
     @GetMapping("/vaccinecenter/search")
+    @PreAuthorize("hasRole('PERSON_ROLE')")
     public ResponseEntity<List<VaccineCenterQueryResponse>> searchVaccineCenterByText(
             @RequestParam("text") final String text) {
         List<VaccineCenterQueryResponse> vaccineCenterQueryResponses =

@@ -1,4 +1,4 @@
-package com.vaccinetracker.query;
+package com.vaccinetracker.security;
 
 public class Constants {
 

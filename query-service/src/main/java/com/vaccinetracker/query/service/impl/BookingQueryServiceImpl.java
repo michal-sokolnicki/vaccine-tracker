@@ -29,7 +29,7 @@ public class BookingQueryServiceImpl implements BookingQueryService {
     }
 
     @Override
-    public List<BookingQueryResponse> getBookingHistoryByGovId(String govId) {
+    public List<BookingQueryResponse> getBookingByGovId(String govId) {
         log.info("Querying documents by govId: {}", govId);
         List<BookingIndexModel> bookingIndexModels =
                 bookingElasticQueryClient.getBookingByGovId(govId);

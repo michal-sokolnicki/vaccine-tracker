@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.vaccinetracker")
-public class UserServiceApplication {
+public class UserServiceApplication{
 
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);

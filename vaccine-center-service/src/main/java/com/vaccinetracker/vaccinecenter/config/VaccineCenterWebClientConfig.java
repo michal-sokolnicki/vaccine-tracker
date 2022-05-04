@@ -1,48 +1,41 @@
-package com.vaccinetracker.user.config;
+package com.vaccinetracker.vaccinecenter.config;
 
 import com.vaccinetracker.config.QueryWebClientConfigData;
+import com.vaccinetracker.config.UserConfigData;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
-import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-@RequiredArgsConstructor
-public class WebClientConfig {
+public class VaccineCenterWebClientConfig {
 
     private final QueryWebClientConfigData.WebClient queryWebClientConfigData;
+    private final UserConfigData userConfigData;
 
-    @Value("${security.default-client-registration-id}")
-    private String defaultClientRegistrationId;
+    public VaccineCenterWebClientConfig(QueryWebClientConfigData queryWebClientConfigData, UserConfigData userConfigData) {
+        this.queryWebClientConfigData = queryWebClientConfigData.getWebClient();
+        this.userConfigData = userConfigData;
+    }
 
     @LoadBalanced
     @Bean("webClientBuilder")
-    public WebClient.Builder webClientBuilder(ClientRegistrationRepository clientRegistrationRepository,
-                                              OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository) {
-        ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(
-                        clientRegistrationRepository,
-                        oAuth2AuthorizedClientRepository);
-        oauth2.setDefaultOAuth2AuthorizedClient(true);
-        oauth2.setDefaultClientRegistrationId(defaultClientRegistrationId);
+    public WebClient.Builder webClientBuilder() {
         return WebClient.builder()
+                .filter(ExchangeFilterFunctions.basicAuthentication(userConfigData.getUsername(),
+                        userConfigData.getPassword()))
                 .baseUrl(queryWebClientConfigData.getBaseUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, queryWebClientConfigData.getContentType())
                 .clientConnector(new ReactorClientHttpConnector(getHttpClient()))
-                .apply(oauth2.oauth2Configuration())
                 .codecs(clientCodecConfigurer -> clientCodecConfigurer.defaultCodecs()
                         .maxInMemorySize(queryWebClientConfigData.getMaxInMemorySize()));
     }
