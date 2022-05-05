@@ -1,10 +1,6 @@
 package com.vaccinetracker.query.config;
 
-import com.vaccinetracker.security.common.UserJwtConverter;
-import com.vaccinetracker.security.common.UserDetailsService;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -12,24 +8,19 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
-import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserDetailsService userDetailsService;
-    private final OAuth2ResourceServerProperties oAuth2ResourceServerProperties;
-    private final OAuth2TokenValidator<Jwt> audienceValidator;
+    private final JwtDecoder jwtDecoder;
+    private final Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter;
 
-    public SecurityConfig(UserDetailsService userDetailsService,
-                          OAuth2ResourceServerProperties oAuth2ResourceServerProperties,
-                          @Qualifier("service-audience-validator") OAuth2TokenValidator<Jwt> audienceValidator) {
-        this.userDetailsService = userDetailsService;
-        this.oAuth2ResourceServerProperties = oAuth2ResourceServerProperties;
-        this.audienceValidator = audienceValidator;
+    public SecurityConfig(@Qualifier("jwt-decoder") JwtDecoder jwtDecoder,
+            @Qualifier("user-jwt-converter") Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter) {
+        this.jwtDecoder = jwtDecoder;
+        this.userJwtConverter = userJwtConverter;
     }
 
     @Override
@@ -45,23 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
-                .decoder(jwtDecoder())
-                .jwtAuthenticationConverter(userJwtConverter());
-    }
-
-    @Bean
-    public Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter() {
-        return new UserJwtConverter(userDetailsService);
-    }
-
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(
-                oAuth2ResourceServerProperties.getJwt().getIssuerUri());
-        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(
-                oAuth2ResourceServerProperties.getJwt().getIssuerUri());
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-        jwtDecoder.setJwtValidator(withAudience);
-        return jwtDecoder;
+                .decoder(jwtDecoder)
+                .jwtAuthenticationConverter(userJwtConverter);
     }
 }

@@ -1,4 +1,4 @@
-package com.vaccinetracker.booking.model;
+package com.vaccinetracker.user.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
