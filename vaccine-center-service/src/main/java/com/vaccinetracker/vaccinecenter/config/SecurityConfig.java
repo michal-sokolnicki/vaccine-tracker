@@ -16,10 +16,10 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtDecoder jwtDecoder;
-    private final Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter;
+    private final Converter<Jwt, AbstractAuthenticationToken> userJwtConverter;
 
     public SecurityConfig(@Qualifier("jwt-decoder") JwtDecoder jwtDecoder,
-                          @Qualifier("user-jwt-converter") Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter) {
+                          @Qualifier("user-jwt-converter") Converter<Jwt, AbstractAuthenticationToken> userJwtConverter) {
         this.jwtDecoder = jwtDecoder;
         this.userJwtConverter = userJwtConverter;
     }

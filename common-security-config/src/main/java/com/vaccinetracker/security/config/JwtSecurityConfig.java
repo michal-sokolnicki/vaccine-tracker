@@ -29,7 +29,7 @@ public class JwtSecurityConfig {
 
     @Bean
     @Qualifier("user-jwt-converter")
-    public Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter() {
+    public Converter<Jwt, AbstractAuthenticationToken> userJwtConverter() {
         return new UserJwtConverter(userDetailsService);
     }
 

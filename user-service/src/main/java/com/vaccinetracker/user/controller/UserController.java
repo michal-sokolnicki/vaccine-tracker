@@ -28,7 +28,7 @@ public class UserController {
     }
 
     @GetMapping("/booking/{govId}")
-    @PreAuthorize("isAuthenticated() AND hasRole('PERSON_ROLE') OR hasAuthority('SCOPE_PERSON_SCOPE')")
+    @PreAuthorize("isAuthenticated() AND hasRole('PERSON_ROLE')")
     public ResponseEntity<List<BookingQueryWebClientResponse>> getBookingByGovId(
             @PathVariable("govId") final String govId) {
         List<BookingQueryWebClientResponse> bookingQueryResponses = userService.getBookingByGovId(govId);
@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/vaccinecenter/search")
-    @PreAuthorize("isAuthenticated() AND hasRole('PERSON_ROLE') OR hasAuthority('SCOPE_PERSON_SCOPE')")
+    @PreAuthorize("isAuthenticated() AND hasRole('PERSON_ROLE')")
     public ResponseEntity<List<VaccineCenterQueryWebClientResponse>> searchVaccineCenterByText(
             @RequestParam("text") final String text) {
         List<VaccineCenterQueryWebClientResponse> vaccineCenterQueryResponses =
