@@ -10,7 +10,7 @@ spring:
         git:
           uri: https://github.com/michal-sokolnicki/spring-cloud-config-repository.git
           username: michal-sokolnicki
-          password: '{cipher}98c18823aa45d3d761d82ff490e70e02884be132990079301e838900c5774042e6eb50b204411e390020c895bc3ad94a9b43388d3efc241a5045c04b0ad62e12'
+          password: '{cipher}63682f2b297578ed465c44a7e686fa0e403347dae2ee5363282f54380cb0a8d25d76da74bd81d8a1548652808df7e24a9351d072aa021da60915d3dcce10a0c4'
           default-label: main
           clone-on-start: true
     fail-fast: true
