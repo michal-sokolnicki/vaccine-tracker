@@ -1,43 +1,43 @@
 package com.vaccinetracker.vaccinecenter.config;
 
-import com.vaccinetracker.config.UserConfigData;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 
 @Configuration
-@EnableWebSecurity
-@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserConfigData userConfigData;
+    private final JwtDecoder jwtDecoder;
+    private final Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter;
+
+    public SecurityConfig(@Qualifier("jwt-decoder") JwtDecoder jwtDecoder,
+                          @Qualifier("user-jwt-converter") Converter<Jwt, ? extends AbstractAuthenticationToken> userJwtConverter) {
+        this.jwtDecoder = jwtDecoder;
+        this.userJwtConverter = userJwtConverter;
+    }
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.httpBasic()
+        httpSecurity.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/**").hasRole("USER")
+                .anyRequest()
+                .fullyAuthenticated()
                 .and()
-                .csrf().disable();
-    }
-
-    @Override
-    public void configure(AuthenticationManagerBuilder builder) throws Exception {
-        builder.inMemoryAuthentication()
-                .withUser(userConfigData.getUsername())
-                .password(passwordEncoder().encode(userConfigData.getPassword()))
-                .roles(userConfigData.getRoles());
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+                .oauth2ResourceServer()
+                .jwt()
+                .decoder(jwtDecoder)
+                .jwtAuthenticationConverter(userJwtConverter);
     }
 }

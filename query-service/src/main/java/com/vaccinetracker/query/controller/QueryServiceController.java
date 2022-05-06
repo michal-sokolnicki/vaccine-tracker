@@ -33,14 +33,14 @@ public class QueryServiceController {
     }
 
     @GetMapping("/booking/{id}")
-    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
+    @PreAuthorize("hasAuthority('SCOPE_PERSON_SCOPE') OR hasAuthority('SCOPE_VACCINE_CENTER_USER_SCOPE')")
     public ResponseEntity<BookingQueryResponse> getBookingById(@PathVariable("id") final String id) {
         BookingQueryResponse bookingQueryResponse = bookingQueryService.getBookingById(id);
         return ResponseEntity.ok(bookingQueryResponse);
     }
 
     @PostMapping("/booking/range")
-    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
+    @PreAuthorize("hasAuthority('SCOPE_PERSON_SCOPE') OR hasAuthority('SCOPE_VACCINE_CENTER_USER_SCOPE')")
     public ResponseEntity<List<BookingQueryResponse>> getBookingByDateRange(
             @RequestBody final BookingQueryRequest bookingQueryRequest) {
         List<BookingQueryResponse> bookingQueryResponses =
@@ -49,7 +49,7 @@ public class QueryServiceController {
     }
 
     @GetMapping("/booking/search")
-    @PreAuthorize("hasRole('PERSON_ROLE')")
+    @PreAuthorize("hasAuthority('SCOPE_PERSON_SCOPE')")
     public ResponseEntity<List<BookingQueryResponse>> searchBookingByText(
             @RequestParam("text") final String text) {
         List<BookingQueryResponse> bookingQueryResponses = bookingQueryService.searchByText(text);
@@ -57,7 +57,7 @@ public class QueryServiceController {
     }
 
     @GetMapping("/vaccinecenter/{id}")
-    @PreAuthorize("hasRole('PERSON_ROLE') || hasRole('VACCINE_CENTER_USER_ROLE')")
+    @PreAuthorize("hasAuthority('SCOPE_VACCINE_CENTER_USER_SCOPE')")
     public ResponseEntity<VaccineCenterQueryResponse> getVaccineCenterById(
             @PathVariable("id") final String id) {
         VaccineCenterQueryResponse vaccineCenterQueryResponse =
@@ -66,7 +66,7 @@ public class QueryServiceController {
     }
 
     @GetMapping("/vaccinecenter/search")
-    @PreAuthorize("hasRole('PERSON_ROLE')")
+    @PreAuthorize("hasAuthority('SCOPE_PERSON_SCOPE')")
     public ResponseEntity<List<VaccineCenterQueryResponse>> searchVaccineCenterByText(
             @RequestParam("text") final String text) {
         List<VaccineCenterQueryResponse> vaccineCenterQueryResponses =

@@ -1,8 +1,9 @@
 package com.vaccinetracker.user.service.impl;
 
 import com.vaccinetracker.user.model.UserRequest;
-import com.vaccinetracker.user.query.model.UserQueryWebClientResponse;
-import com.vaccinetracker.user.service.BookingQueryWebClient;
+import com.vaccinetracker.user.query.model.BookingQueryWebClientResponse;
+import com.vaccinetracker.user.query.model.VaccineCenterQueryWebClientResponse;
+import com.vaccinetracker.user.service.QueryWebClient;
 import com.vaccinetracker.user.service.UserService;
 import org.keycloak.admin.client.resource.*;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -19,12 +20,12 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
 
     private final RealmResource realmResource;
-    private final BookingQueryWebClient bookingQueryWebClient;
+    private final QueryWebClient queryWebClient;
 
     public UserServiceImpl(@Qualifier("realm-resource-client") RealmResource realmResource,
-                           BookingQueryWebClient bookingQueryWebClient) {
+                           QueryWebClient queryWebClient) {
         this.realmResource = realmResource;
-        this.bookingQueryWebClient = bookingQueryWebClient;
+        this.queryWebClient = queryWebClient;
     }
 
     @Override
@@ -60,7 +61,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserQueryWebClientResponse> getBookingByGovId(String govId) {
-        return bookingQueryWebClient.getBookingByGovId(govId);
+    public List<BookingQueryWebClientResponse> getBookingByGovId(String govId) {
+        return queryWebClient.getBookingByGovId(govId);
+    }
+
+    @Override
+    public List<VaccineCenterQueryWebClientResponse> searchVaccineCenterByText(String text) {
+        return queryWebClient.searchVaccineCenterByText(text);
     }
 }

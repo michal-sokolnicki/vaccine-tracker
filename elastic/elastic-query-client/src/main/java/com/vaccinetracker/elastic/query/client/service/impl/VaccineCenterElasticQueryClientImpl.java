@@ -27,9 +27,6 @@ public class VaccineCenterElasticQueryClientImpl extends ElasticRepositoryQueryC
 
     @Override
     public List<VaccineCenterIndexModel> searchVaccineCentersByText(String text) {
-        List<VaccineCenterIndexModel> searchResults =
-                vaccineCenterElasticsearchQueryRepository.findByTextWithPositiveQuantities(text);
-        log.info("{} of document with text {} retrieved successfully", searchResults.size(), text);
-        return searchResults;
+        return vaccineCenterElasticsearchQueryRepository.findByTextWithPositiveQuantities(text);
     }
 }

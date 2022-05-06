@@ -18,6 +18,14 @@
         </dependency>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
+            <artifactId>common-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaccinetracker</groupId>
+            <artifactId>common-webclient-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaccinetracker</groupId>
             <artifactId>kafka-consumer</artifactId>
         </dependency>
         <dependency>

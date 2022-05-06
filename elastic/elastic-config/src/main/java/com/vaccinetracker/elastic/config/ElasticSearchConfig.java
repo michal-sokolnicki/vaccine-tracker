@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.lang.NonNull;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,8 +26,9 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
         this.elasticConfigData = elasticConfigData;
     }
 
-    @Override
     @Bean
+    @Override
+    @NonNull
     public RestHighLevelClient elasticsearchClient() {
         UriComponents serverUri = UriComponentsBuilder.fromHttpUrl(elasticConfigData.getConnectionUrl()).build();
         return new RestHighLevelClient(

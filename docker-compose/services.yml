@@ -16,7 +16,6 @@ services:
     entrypoint: ["check-config-server-started.sh"]
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms128m -Xmx256m"
-      - "LOGGING_LEVEL_COM_VACCINETRACKER=debug"
       - "LOGGING_LEVEL_ROOT=debug"
       - "KAFKA-CONFIG_TOPIC-NAME=booking-topic"
       - "KAFKA-CONFIG_BOOTSTRAP-SERVERS=kafka-broker-1:9092, kafka-broker-2:9092, kafka-broker-3:9092"

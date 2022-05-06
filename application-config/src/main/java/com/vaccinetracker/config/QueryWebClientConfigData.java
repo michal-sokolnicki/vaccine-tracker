@@ -31,5 +31,6 @@ public class QueryWebClientConfigData {
     public static class Query {
         private String baseUri;
         private String ownedUri;
+        private String searchUri;
     }
 }

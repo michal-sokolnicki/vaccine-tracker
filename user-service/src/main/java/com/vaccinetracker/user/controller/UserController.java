@@ -1,7 +1,8 @@
 package com.vaccinetracker.user.controller;
 
 import com.vaccinetracker.user.model.UserRequest;
-import com.vaccinetracker.user.query.model.UserQueryWebClientResponse;
+import com.vaccinetracker.user.query.model.BookingQueryWebClientResponse;
+import com.vaccinetracker.user.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,24 @@ public class UserController {
     @PostMapping("/registration")
     public ResponseEntity<String> registerUser(@RequestBody final UserRequest userRequest) {
         userService.registerUser(userRequest);
-        return new ResponseEntity<>(MessageFormat.format("Your {0} has been created", userRequest.getUsername()),
+        return new ResponseEntity<>(MessageFormat.format("User: {0} has been created", userRequest.getUsername()),
                 HttpStatus.CREATED);
     }
 
     @GetMapping("/booking/{govId}")
     @PreAuthorize("isAuthenticated() AND hasRole('PERSON_ROLE') OR hasAuthority('SCOPE_PERSON_SCOPE')")
-    public ResponseEntity<List<UserQueryWebClientResponse>> getBookingByGovId(
+    public ResponseEntity<List<BookingQueryWebClientResponse>> getBookingByGovId(
             @PathVariable("govId") final String govId) {
-        List<UserQueryWebClientResponse> bookingQueryResponses = userService.getBookingByGovId(govId);
+        List<BookingQueryWebClientResponse> bookingQueryResponses = userService.getBookingByGovId(govId);
         return ResponseEntity.ok(bookingQueryResponses);
+    }
+
+    @GetMapping("/vaccinecenter/search")
+    @PreAuthorize("isAuthenticated() AND hasRole('PERSON_ROLE') OR hasAuthority('SCOPE_PERSON_SCOPE')")
+    public ResponseEntity<List<VaccineCenterQueryWebClientResponse>> searchVaccineCenterByText(
+            @RequestParam("text") final String text) {
+        List<VaccineCenterQueryWebClientResponse> vaccineCenterQueryResponses =
+                userService.searchVaccineCenterByText(text);
+        return ResponseEntity.ok(vaccineCenterQueryResponses);
     }
 }

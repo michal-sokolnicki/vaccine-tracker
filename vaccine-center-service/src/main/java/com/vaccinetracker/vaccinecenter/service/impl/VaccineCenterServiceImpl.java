@@ -6,13 +6,12 @@ import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
 import com.vaccinetracker.vaccinecenter.model.VaccineCenterRequest;
 import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
-import com.vaccinetracker.vaccinecenter.service.VaccineCenterQueryWebClient;
+import com.vaccinetracker.vaccinecenter.service.QueryWebClient;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import com.vaccinetracker.vaccinecenter.service.transformer.ResponseModelToIndexModelTransformer;
 import com.vaccinetracker.vaccinecenter.service.transformer.VaccineCenterToIndexModelTransformer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +22,7 @@ import java.util.List;
 public class VaccineCenterServiceImpl implements VaccineCenterService {
 
     private final VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer;
-    private final VaccineCenterQueryWebClient vaccineCenterQueryWebClient;
+    private final QueryWebClient queryWebClient;
     private final ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer;
     private final ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient;
 
@@ -42,7 +41,7 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
 
     private void processMessage(BookingAvroModel bookingAvroModel) {
         VaccineCenterQueryWebClientResponse responseModel =
-                vaccineCenterQueryWebClient.getVaccineCenterById(bookingAvroModel.getVaccineCenterId());
+                queryWebClient.getVaccineCenterById(bookingAvroModel.getVaccineCenterId());
         responseModel.getVaccineStocks()
                 .forEach(vaccineStock -> reduceQuantity(vaccineStock, bookingAvroModel.getVaccineType()));
         VaccineCenterIndexModel vaccineCenterIndexModel =
