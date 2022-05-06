@@ -14,6 +14,10 @@
     <dependencies>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
+            <artifactId>common-register-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaccinetracker</groupId>
             <artifactId>common-security-config</artifactId>
         </dependency>
         <dependency>
@@ -52,10 +56,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-admin-client</artifactId>
         </dependency>
     </dependencies>
 

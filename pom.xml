@@ -19,6 +19,7 @@
 		<module>gateway-service</module>
 		<module>common-security-config</module>
         <module>common-webclient-config</module>
+        <module>common-register-config</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -66,6 +67,11 @@
 			<dependency>
 				<groupId>com.vaccinetracker</groupId>
 				<artifactId>common-config</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.vaccinetracker</groupId>
+				<artifactId>common-register-config</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

@@ -16,6 +16,7 @@ public class UserDetails {
     private String firstname;
     private String lastname;
     private String govId;
+    private String vaccineCenterId;
     private Collection<? extends GrantedAuthority> authorities;
 
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {

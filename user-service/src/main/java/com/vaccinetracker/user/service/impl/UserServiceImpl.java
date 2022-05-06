@@ -19,6 +19,9 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final String GOV_ID_ATTRIBUTE = "gov_id";
+    private static final String PERSON_GROUP_PATH = "/person_group";
+
     private final RealmResource realmResource;
     private final QueryWebClient queryWebClient;
 
@@ -43,7 +46,7 @@ public class UserServiceImpl implements UserService {
         userRepresentation.setCredentials(getCredentials(userRequest.getPassword()));
         userRepresentation.setGroups(getGroups());
         userRepresentation.setEnabled(true);
-        userRepresentation.setAttributes(Map.of("gov_id", Collections.singletonList(userRequest.getGovId())));
+        userRepresentation.setAttributes(Map.of(GOV_ID_ATTRIBUTE, Collections.singletonList(userRequest.getGovId())));
         return userRepresentation;
     }
 
@@ -56,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<String> getGroups() {
-        GroupRepresentation groupRepresentation = realmResource.getGroupByPath("/person_group");
+        GroupRepresentation groupRepresentation = realmResource.getGroupByPath(PERSON_GROUP_PATH);
         return List.of(groupRepresentation.getName());
     }
 
