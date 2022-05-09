@@ -30,6 +30,10 @@
         </dependency>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
+            <artifactId>kafka-producer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaccinetracker</groupId>
             <artifactId>kafka-consumer</artifactId>
         </dependency>
         <dependency>

@@ -1,4 +1,4 @@
-package com.vaccinetracker.query.transformer;
+package com.vaccinetracker.query.service.transformer;
 
 import com.vaccinetracker.elastic.model.impl.BookingIndexModel;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;

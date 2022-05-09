@@ -1,16 +1,19 @@
 package com.vaccinetracker.vaccinecenter.service.impl;
 
+import com.vaccinetracker.config.KafkaConfigData;
 import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.entity.VaccineStock;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
+import com.vaccinetracker.kafka.avro.model.VaccinationStatusAvroModel;
+import com.vaccinetracker.kafka.producer.service.KafkaProducer;
 import com.vaccinetracker.vaccinecenter.model.UserRequest;
 import com.vaccinetracker.vaccinecenter.model.VaccineCenterRequest;
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.vaccinecenter.service.QueryWebClient;
 import com.vaccinetracker.vaccinecenter.service.VaccineCenterService;
 import com.vaccinetracker.vaccinecenter.service.transformer.ResponseModelToIndexModelTransformer;
 import com.vaccinetracker.vaccinecenter.service.transformer.VaccineCenterToIndexModelTransformer;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
@@ -29,23 +32,31 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
 
     private static final String VACCINE_CENTER_ID_ATTRIBUTE = "vaccine_center_id";
     private static final String VACCINE_CENTER_GROUP_PATH = "/vaccine_center_group";
+    private static final String COMPLETED = "COMPLETED";
+    private static final String COMPLETED_MESSAGE = "Vaccination successfully completed";
 
     private final RealmResource realmResource;
     private final VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer;
     private final QueryWebClient queryWebClient;
     private final ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer;
     private final ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient;
+    private final KafkaConfigData kafkaConfigData;
+    private final KafkaProducer<String, VaccinationStatusAvroModel> kafkaProducer;
 
     public VaccineCenterServiceImpl(@Qualifier("realm-resource-client") RealmResource realmResource,
                                     VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer,
                                     QueryWebClient queryWebClient,
                                     ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer,
-                                    ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient) {
+                                    ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient,
+                                    KafkaConfigData kafkaConfigData,
+                                    KafkaProducer<String, VaccinationStatusAvroModel> kafkaProducer) {
         this.realmResource = realmResource;
         this.vaccineCenterToIndexModelTransformer = vaccineCenterToIndexModelTransformer;
         this.queryWebClient = queryWebClient;
         this.responseModelToIndexModelTransformer = responseModelToIndexModelTransformer;
         this.elasticIndexClient = elasticIndexClient;
+        this.kafkaConfigData = kafkaConfigData;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -117,5 +128,20 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
         } else {
             vaccineStock.setQuantity(vaccineStock.getQuantity() - 1);
         }
+    }
+
+    @Override
+    public void publishVaccinationCompleted(String bookingId) {
+        VaccinationStatusAvroModel vaccinationStatusAvroModel = getVaccinationStatusAvroModel(bookingId);
+        kafkaProducer.send(kafkaConfigData.getProducerTopicName(), bookingId,
+                vaccinationStatusAvroModel);
+    }
+
+    private VaccinationStatusAvroModel getVaccinationStatusAvroModel(String bookingId) {
+        return VaccinationStatusAvroModel.newBuilder()
+                .setBookingId(bookingId)
+                .setStatus(COMPLETED)
+                .setMessage(COMPLETED_MESSAGE)
+                .build();
     }
 }

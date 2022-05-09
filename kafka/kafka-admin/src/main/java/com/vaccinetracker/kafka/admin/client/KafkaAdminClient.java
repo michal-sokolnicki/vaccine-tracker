@@ -40,9 +40,8 @@ public class KafkaAdminClient {
     }
 
     public void createTopics() {
-        CreateTopicsResult createTopicsResult;
         try {
-            createTopicsResult = retryTemplate.execute(this::createKafkaTopics);
+            retryTemplate.execute(this::createKafkaTopics);
         } catch (Exception e) {
             throw new KafkaClientException("Reached max number of retry creating kafka topic(s)!", e);
         }
@@ -131,7 +130,7 @@ public class KafkaAdminClient {
                     .toBodilessEntity()
                     .blockOptional()
                     .map(ResponseEntity::getStatusCode)
-                    .orElseGet(() -> HttpStatus.SERVICE_UNAVAILABLE);
+                    .orElse(HttpStatus.SERVICE_UNAVAILABLE);
         } catch (Exception e) {
             return HttpStatus.SERVICE_UNAVAILABLE;
         }

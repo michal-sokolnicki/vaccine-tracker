@@ -1,4 +1,4 @@
-package com.vaccinetracker.user.query.model;
+package com.vaccinetracker.webclient.query.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

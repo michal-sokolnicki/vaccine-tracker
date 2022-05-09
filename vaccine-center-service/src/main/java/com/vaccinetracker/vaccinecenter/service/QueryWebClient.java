@@ -1,6 +1,6 @@
 package com.vaccinetracker.vaccinecenter.service;
 
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 
 public interface QueryWebClient {
 

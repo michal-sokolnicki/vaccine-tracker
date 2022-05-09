@@ -1,7 +1,7 @@
 package com.vaccinetracker.user.service;
 
-import com.vaccinetracker.user.query.model.BookingQueryWebClientResponse;
-import com.vaccinetracker.user.query.model.VaccineCenterQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.BookingQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 
 import java.util.List;
 

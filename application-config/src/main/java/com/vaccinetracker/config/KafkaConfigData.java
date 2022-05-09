@@ -14,7 +14,8 @@ public class KafkaConfigData {
     private String bootstrapServers;
     private String schemaRegistryUrlKey;
     private String schemaRegistryUrl;
-    private String topicName;
+    private String producerTopicName;
+    private String consumerTopicName;
     private List<String> topicNamesToCreate;
     private String topicKeyValue;
     private Integer numOfPartitions;

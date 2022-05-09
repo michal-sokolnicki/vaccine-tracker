@@ -1,7 +1,7 @@
 package com.vaccinetracker.vaccinecenter.service.transformer;
 
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
-import com.vaccinetracker.vaccinecenter.query.model.VaccineCenterQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 import org.springframework.stereotype.Component;
 
 @Component

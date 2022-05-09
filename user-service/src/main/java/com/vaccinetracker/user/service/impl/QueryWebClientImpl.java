@@ -1,10 +1,10 @@
 package com.vaccinetracker.user.service.impl;
 
 import com.vaccinetracker.config.QueryWebClientConfigData;
-import com.vaccinetracker.user.query.exception.QueryWebClientException;
-import com.vaccinetracker.user.query.model.BookingQueryWebClientResponse;
-import com.vaccinetracker.user.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.user.service.QueryWebClient;
+import com.vaccinetracker.webclient.query.exception.QueryWebClientException;
+import com.vaccinetracker.webclient.query.model.BookingQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
@@ -13,8 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriBuilder;
-import org.springframework.web.util.UriBuilderFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
@@ -27,15 +25,15 @@ public class QueryWebClientImpl implements QueryWebClient {
     private final WebClient.Builder webClientBuilder;
     private final QueryWebClientConfigData queryWebClientConfigData;
 
-    public QueryWebClientImpl(@Qualifier("web-client-builder") WebClient.Builder clientBuilder,
+    public QueryWebClientImpl(@Qualifier("web-client-builder") WebClient.Builder webClientBuilder,
                               QueryWebClientConfigData queryWebClientConfigData) {
-        this.webClientBuilder = clientBuilder;
+        this.webClientBuilder = webClientBuilder;
         this.queryWebClientConfigData = queryWebClientConfigData;
     }
 
     @Override
     public List<BookingQueryWebClientResponse> getBookingByGovId(String govId) {
-        log.info("Querying by govId: {}", govId);
+        log.info("Querying by gov id: {}", govId);
         WebClient.ResponseSpec responseSpec = getWebClient(
                 queryWebClientConfigData.getQueryBookingPath().getOwnedUri() + govId);
         return responseSpec.bodyToFlux(BookingQueryWebClientResponse.class)

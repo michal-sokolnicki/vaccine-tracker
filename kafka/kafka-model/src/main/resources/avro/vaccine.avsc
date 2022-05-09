@@ -1,0 +1,10 @@
+{
+    "namespace": "com.vaccinetracker.kafka.avro.model",
+    "type": "record",
+    "name": "VaccinationStatusAvroModel",
+    "fields": [
+        {"name": "bookingId", "type": "string"},
+        {"name": "status", "type": "string"},
+        {"name": "message", "type": "string"}
+    ]
+}

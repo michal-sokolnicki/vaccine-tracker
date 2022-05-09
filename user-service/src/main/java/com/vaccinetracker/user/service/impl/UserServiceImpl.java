@@ -1,10 +1,10 @@
 package com.vaccinetracker.user.service.impl;
 
 import com.vaccinetracker.user.model.UserRequest;
-import com.vaccinetracker.user.query.model.BookingQueryWebClientResponse;
-import com.vaccinetracker.user.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.user.service.QueryWebClient;
 import com.vaccinetracker.user.service.UserService;
+import com.vaccinetracker.webclient.query.model.BookingQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 import org.keycloak.admin.client.resource.*;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.GroupRepresentation;

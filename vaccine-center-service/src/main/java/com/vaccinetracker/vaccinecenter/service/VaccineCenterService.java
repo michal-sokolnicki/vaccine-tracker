@@ -12,4 +12,5 @@ public interface VaccineCenterService {
     void registerUser(UserRequest userRequest);
     void updateStock(String id, VaccineCenterRequest vaccineCenterRequest);
     void processMessages(List<BookingAvroModel> messages);
+    void publishVaccinationCompleted(String bookingId);
 }

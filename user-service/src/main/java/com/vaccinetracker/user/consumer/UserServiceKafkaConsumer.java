@@ -2,9 +2,10 @@ package com.vaccinetracker.user.consumer;
 
 import com.vaccinetracker.config.KafkaConfigData;
 import com.vaccinetracker.config.KafkaConsumerConfigData;
-/*import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
+import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
 import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
-import com.vaccinetracker.kafka.consumer.service.KafkaConsumer;*/
+import com.vaccinetracker.kafka.avro.model.VaccinationStatusAvroModel;
+import com.vaccinetracker.kafka.consumer.service.KafkaConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -22,9 +23,9 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceKafkaConsumer /*implements KafkaConsumer<String, BookingAvroModel>*/ {
+public class UserServiceKafkaConsumer implements KafkaConsumer<String, VaccinationStatusAvroModel> {
 
-    /*private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
+    private final KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
     private final KafkaAdminClient kafkaAdminClient;
     private final KafkaConfigData kafkaConfigData;
     private final KafkaConsumerConfigData kafkaConsumerConfigData;
@@ -37,13 +38,13 @@ public class UserServiceKafkaConsumer /*implements KafkaConsumer<String, Booking
     }
 
     @Override
-    @KafkaListener(id = "${kafka-consumer-config.consumer-group-id}", topics = "${kafka-config.topic-name}")
-    public void receive(@Payload List<BookingAvroModel> messages,
+    @KafkaListener(id = "${kafka-consumer-config.consumer-group-id}", topics = "${kafka-config.consumer-topic-name}")
+    public void receive(@Payload List<VaccinationStatusAvroModel> messages,
                         @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) List<String> keys,
                         @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
                         @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
         log.info("Kafka listener has been woke up and has received {} number of message with keys {}, " +
                         "partitions {} and offsets {} and will be send to elastic: Thread id {}",
                 messages.size(), keys, partitions.toString(),offsets.toString(), Thread.currentThread().getId());
-    }*/
+    }
 }

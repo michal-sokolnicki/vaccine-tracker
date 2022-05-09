@@ -1,8 +1,8 @@
-package com.vaccinetracker.booking.service.impl;
+package com.vaccinetracker.kafka.admin.service.impl;
 
-import com.vaccinetracker.booking.service.Initializer;
 import com.vaccinetracker.config.KafkaConfigData;
 import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
+import com.vaccinetracker.kafka.admin.service.Initializer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

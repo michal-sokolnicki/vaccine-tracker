@@ -1,8 +1,9 @@
-package com.vaccinetracker.vaccinecenter.service.impl;
+package com.vaccinetracker.booking.service.impl;
 
+import com.vaccinetracker.booking.service.QueryWebClient;
 import com.vaccinetracker.config.QueryWebClientConfigData;
-import com.vaccinetracker.vaccinecenter.service.QueryWebClient;
 import com.vaccinetracker.webclient.query.exception.QueryWebClientException;
+import com.vaccinetracker.webclient.query.model.BookingQueryWebClientResponse;
 import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class QueryWebClientImpl implements QueryWebClient {
@@ -21,18 +24,18 @@ public class QueryWebClientImpl implements QueryWebClient {
     private final WebClient.Builder webClientBuilder;
     private final QueryWebClientConfigData queryWebClientConfigData;
 
-    public QueryWebClientImpl(@Qualifier("web-client-builder") WebClient.Builder clientBuilder,
+    public QueryWebClientImpl(@Qualifier("web-client-builder") WebClient.Builder webClientBuilder,
                               QueryWebClientConfigData queryWebClientConfigData) {
-        this.webClientBuilder = clientBuilder;
+        this.webClientBuilder = webClientBuilder;
         this.queryWebClientConfigData = queryWebClientConfigData;
     }
 
     @Override
-    public VaccineCenterQueryWebClientResponse getVaccineCenterById(String id) {
+    public BookingQueryWebClientResponse getBookingById(String id) {
         log.info("Querying by id: {}", id);
         WebClient.ResponseSpec responseSpec = getWebClient(
-                queryWebClientConfigData.getQueryVaccineCenterPath().getBaseUri() + id);
-        return responseSpec.bodyToMono(VaccineCenterQueryWebClientResponse.class)
+                queryWebClientConfigData.getQueryBookingPath().getBaseUri() + id);
+        return responseSpec.bodyToMono(BookingQueryWebClientResponse.class)
                 .block();
     }
 

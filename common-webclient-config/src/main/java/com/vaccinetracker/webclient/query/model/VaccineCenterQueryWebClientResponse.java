@@ -1,4 +1,4 @@
-package com.vaccinetracker.user.query.model;
+package com.vaccinetracker.webclient.query.model;
 
 import com.vaccinetracker.elastic.model.entity.VaccineStock;
 import lombok.AllArgsConstructor;

@@ -24,7 +24,7 @@
             <groupId>com.vaccinetracker</groupId>
             <artifactId>common-webclient-config</artifactId>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>com.vaccinetracker</groupId>
             <artifactId>kafka-consumer</artifactId>
         </dependency>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>com.vaccinetracker</groupId>
             <artifactId>kafka-model</artifactId>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
             <artifactId>elastic-model</artifactId>

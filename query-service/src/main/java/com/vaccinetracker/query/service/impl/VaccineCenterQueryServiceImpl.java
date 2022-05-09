@@ -4,7 +4,7 @@ import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
 import com.vaccinetracker.elastic.query.client.service.VaccineCenterElasticQueryClient;
 import com.vaccinetracker.query.model.VaccineCenterQueryResponse;
 import com.vaccinetracker.query.service.VaccineCenterQueryService;
-import com.vaccinetracker.query.transformer.IndexModelToResponseTransformer;
+import com.vaccinetracker.query.service.transformer.IndexModelToResponseTransformer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

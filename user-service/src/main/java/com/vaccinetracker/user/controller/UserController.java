@@ -1,9 +1,9 @@
 package com.vaccinetracker.user.controller;
 
 import com.vaccinetracker.user.model.UserRequest;
-import com.vaccinetracker.user.query.model.BookingQueryWebClientResponse;
-import com.vaccinetracker.user.query.model.VaccineCenterQueryWebClientResponse;
 import com.vaccinetracker.user.service.UserService;
+import com.vaccinetracker.webclient.query.model.BookingQueryWebClientResponse;
+import com.vaccinetracker.webclient.query.model.VaccineCenterQueryWebClientResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

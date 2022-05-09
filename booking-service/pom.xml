@@ -26,11 +26,19 @@
         </dependency>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
+            <artifactId>common-webclient-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaccinetracker</groupId>
             <artifactId>kafka-admin</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
             <artifactId>kafka-producer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaccinetracker</groupId>
+            <artifactId>kafka-consumer</artifactId>
         </dependency>
         <dependency>
             <groupId>com.vaccinetracker</groupId>
