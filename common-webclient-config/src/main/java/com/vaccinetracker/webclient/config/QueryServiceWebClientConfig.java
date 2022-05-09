@@ -40,7 +40,6 @@ public class QueryServiceWebClientConfig {
         oauth2.setDefaultClientRegistrationId(defaultClientRegistrationId);
         return WebClient.builder()
                 .baseUrl(queryWebClientConfigData.getBaseUrl())
-                .filter(oauth2)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, queryWebClientConfigData.getContentType())
                 .clientConnector(new ReactorClientHttpConnector(getHttpClient()))
                 .apply(oauth2.oauth2Configuration())
