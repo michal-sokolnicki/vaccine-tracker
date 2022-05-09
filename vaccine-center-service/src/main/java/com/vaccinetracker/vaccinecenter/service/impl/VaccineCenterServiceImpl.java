@@ -1,6 +1,7 @@
 package com.vaccinetracker.vaccinecenter.service.impl;
 
 import com.vaccinetracker.config.KafkaConfigData;
+import com.vaccinetracker.config.RegisterConfigData;
 import com.vaccinetracker.elastic.index.client.service.ElasticIndexClient;
 import com.vaccinetracker.elastic.model.entity.VaccineStock;
 import com.vaccinetracker.elastic.model.impl.VaccineCenterIndexModel;
@@ -30,11 +31,10 @@ import java.util.Map;
 @Service
 public class VaccineCenterServiceImpl implements VaccineCenterService {
 
-    private static final String VACCINE_CENTER_ID_ATTRIBUTE = "vaccine_center_id";
-    private static final String VACCINE_CENTER_GROUP_PATH = "/vaccine_center_group";
     private static final String COMPLETED = "COMPLETED";
     private static final String COMPLETED_MESSAGE = "Vaccination successfully completed";
 
+    private final RegisterConfigData registerConfigData;
     private final RealmResource realmResource;
     private final VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer;
     private final QueryWebClient queryWebClient;
@@ -43,13 +43,15 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
     private final KafkaConfigData kafkaConfigData;
     private final KafkaProducer<String, VaccinationStatusAvroModel> kafkaProducer;
 
-    public VaccineCenterServiceImpl(@Qualifier("realm-resource-client") RealmResource realmResource,
+    public VaccineCenterServiceImpl(RegisterConfigData registerConfigData,
+                                    @Qualifier("realm-resource-client") RealmResource realmResource,
                                     VaccineCenterToIndexModelTransformer vaccineCenterToIndexModelTransformer,
                                     QueryWebClient queryWebClient,
                                     ResponseModelToIndexModelTransformer responseModelToIndexModelTransformer,
                                     ElasticIndexClient<VaccineCenterIndexModel> elasticIndexClient,
                                     KafkaConfigData kafkaConfigData,
                                     KafkaProducer<String, VaccinationStatusAvroModel> kafkaProducer) {
+        this.registerConfigData = registerConfigData;
         this.realmResource = realmResource;
         this.vaccineCenterToIndexModelTransformer = vaccineCenterToIndexModelTransformer;
         this.queryWebClient = queryWebClient;
@@ -74,7 +76,7 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
         userRepresentation.setCredentials(getCredentials(userRequest.getPassword()));
         userRepresentation.setGroups(getGroups());
         userRepresentation.setEnabled(true);
-        userRepresentation.setAttributes(Map.of(VACCINE_CENTER_ID_ATTRIBUTE,
+        userRepresentation.setAttributes(Map.of(registerConfigData.getVaccineCenterIdAttribute(),
                 Collections.singletonList(userRequest.getVaccineCenterId())));
         return userRepresentation;
     }
@@ -88,7 +90,8 @@ public class VaccineCenterServiceImpl implements VaccineCenterService {
     }
 
     private List<String> getGroups() {
-        GroupRepresentation groupRepresentation = realmResource.getGroupByPath(VACCINE_CENTER_GROUP_PATH);
+        GroupRepresentation groupRepresentation = realmResource.getGroupByPath(
+                registerConfigData.getVaccineCenterGroupPath());
         return List.of(groupRepresentation.getName());
     }
 

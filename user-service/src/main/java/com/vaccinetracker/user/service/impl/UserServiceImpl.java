@@ -1,5 +1,6 @@
 package com.vaccinetracker.user.service.impl;
 
+import com.vaccinetracker.config.RegisterConfigData;
 import com.vaccinetracker.user.model.UserRequest;
 import com.vaccinetracker.user.service.QueryWebClient;
 import com.vaccinetracker.user.service.UserService;
@@ -19,14 +20,14 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final String GOV_ID_ATTRIBUTE = "gov_id";
-    private static final String PERSON_GROUP_PATH = "/person_group";
-
+    private final RegisterConfigData registerConfigData;
     private final RealmResource realmResource;
     private final QueryWebClient queryWebClient;
 
-    public UserServiceImpl(@Qualifier("realm-resource-client") RealmResource realmResource,
+    public UserServiceImpl(RegisterConfigData registerConfigData,
+                           @Qualifier("realm-resource-client") RealmResource realmResource,
                            QueryWebClient queryWebClient) {
+        this.registerConfigData = registerConfigData;
         this.realmResource = realmResource;
         this.queryWebClient = queryWebClient;
     }
@@ -46,7 +47,8 @@ public class UserServiceImpl implements UserService {
         userRepresentation.setCredentials(getCredentials(userRequest.getPassword()));
         userRepresentation.setGroups(getGroups());
         userRepresentation.setEnabled(true);
-        userRepresentation.setAttributes(Map.of(GOV_ID_ATTRIBUTE, Collections.singletonList(userRequest.getGovId())));
+        userRepresentation.setAttributes(Map.of(registerConfigData.getGovIdAttribute(),
+                Collections.singletonList(userRequest.getGovId())));
         return userRepresentation;
     }
 
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<String> getGroups() {
-        GroupRepresentation groupRepresentation = realmResource.getGroupByPath(PERSON_GROUP_PATH);
+        GroupRepresentation groupRepresentation = realmResource.getGroupByPath(registerConfigData.getPersonGroupPath());
         return List.of(groupRepresentation.getName());
     }
 

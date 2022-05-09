@@ -3,7 +3,6 @@ package com.vaccinetracker.user.consumer;
 import com.vaccinetracker.config.KafkaConfigData;
 import com.vaccinetracker.config.KafkaConsumerConfigData;
 import com.vaccinetracker.kafka.admin.client.KafkaAdminClient;
-import com.vaccinetracker.kafka.avro.model.BookingAvroModel;
 import com.vaccinetracker.kafka.avro.model.VaccinationStatusAvroModel;
 import com.vaccinetracker.kafka.consumer.service.KafkaConsumer;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +43,7 @@ public class UserServiceKafkaConsumer implements KafkaConsumer<String, Vaccinati
                         @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
                         @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
         log.info("Kafka listener has been woke up and has received {} number of message with keys {}, " +
-                        "partitions {} and offsets {} and will be send to elastic: Thread id {}",
+                        "partitions {} and offsets {} and Thread id {}",
                 messages.size(), keys, partitions.toString(),offsets.toString(), Thread.currentThread().getId());
     }
 }

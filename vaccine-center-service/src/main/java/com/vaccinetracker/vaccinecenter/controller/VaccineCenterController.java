@@ -34,4 +34,12 @@ public class VaccineCenterController {
         vaccineCenterService.updateStock(id, vaccineCenterRequest);
         return new ResponseEntity<>("Vaccine center stock has been updated", HttpStatus.ACCEPTED);
     }
+
+    @PutMapping("vaccination/{id}/completed")
+    @PreAuthorize("hasRole('VACCINE_CENTER_USER_ROLE')")
+    public ResponseEntity<String> publishVaccinationCompleted(@PathVariable("id") final String id) {
+        vaccineCenterService.publishVaccinationCompleted(id);
+        return new ResponseEntity<>(MessageFormat.format("Vaccination with id {0} has been completed", id),
+                HttpStatus.ACCEPTED);
+    }
 }

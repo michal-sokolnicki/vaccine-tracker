@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
@@ -32,11 +33,9 @@ public class QueryServiceWebClientConfig {
 
     @LoadBalanced
     @Bean("web-client-builder")
-    public WebClient.Builder webClientBuilder(ClientRegistrationRepository clientRegistrationRepository,
-                                              OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository) {
+    public WebClient.Builder webClientBuilder(OAuth2AuthorizedClientManager oAuth2AuthorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2 =
-                new ServletOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository,
-                        oAuth2AuthorizedClientRepository);
+                new ServletOAuth2AuthorizedClientExchangeFilterFunction(oAuth2AuthorizedClientManager);
         oauth2.setDefaultOAuth2AuthorizedClient(true);
         oauth2.setDefaultClientRegistrationId(defaultClientRegistrationId);
         return WebClient.builder()
@@ -44,6 +43,7 @@ public class QueryServiceWebClientConfig {
                 .filter(oauth2)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, queryWebClientConfigData.getContentType())
                 .clientConnector(new ReactorClientHttpConnector(getHttpClient()))
+                .apply(oauth2.oauth2Configuration())
                 .codecs(clientCodecConfigurer -> clientCodecConfigurer.defaultCodecs()
                         .maxInMemorySize(queryWebClientConfigData.getMaxInMemorySize()));
     }
@@ -56,5 +56,19 @@ public class QueryServiceWebClientConfig {
                                         TimeUnit.MILLISECONDS))
                                 .addHandlerLast(new WriteTimeoutHandler(queryWebClientConfigData.getWriteTimeoutMs(),
                                         TimeUnit.MILLISECONDS)));
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientManager authorizedClientManager(
+            ClientRegistrationRepository clientRegistrationRepository,
+            OAuth2AuthorizedClientService oAuth2AuthorizedClientService) {
+        OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
+                        .clientCredentials()
+                        .build();
+        AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager =
+                new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository, oAuth2AuthorizedClientService);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+        return authorizedClientManager;
     }
 }
