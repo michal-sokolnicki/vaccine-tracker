@@ -1,16 +1,16 @@
-package com.vaccinetracker.user;
+package com.vaccinetracker.discovery;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.context.annotation.ComponentScan;
 
-@EnableEurekaClient
+@EnableEurekaServer
 @SpringBootApplication
 @ComponentScan(basePackages = "com.vaccinetracker")
-public class UserServiceApplication{
+public class ServiceDiscoveryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
+        SpringApplication.run(ServiceDiscoveryApplication.class, args);
     }
 }

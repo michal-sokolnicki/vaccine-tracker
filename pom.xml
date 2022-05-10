@@ -20,6 +20,7 @@
 		<module>common-security-config</module>
         <module>common-webclient-config</module>
         <module>common-register-config</module>
+        <module>discovery-service</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -177,6 +178,16 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-config</artifactId>
+				<version>${spring-cloud.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+				<version>${spring-cloud.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 				<version>${spring-cloud.version}</version>
 			</dependency>
 			<dependency>

@@ -10,3 +10,11 @@ spring:
       name: vaccine-center-service, config-client
       username: spring_cloud_user
       password: '{cipher}25bb67d9e841669ebfeb499458aeb10f8d2f054415001025b69e5b14a80f9dec'
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 2
